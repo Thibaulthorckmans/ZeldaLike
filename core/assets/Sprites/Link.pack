@@ -1,0 +1,12 @@
+
+Link.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Link
+  rotate: false
+  xy: 1, 1
+  size: 560, 26
+  orig: 560, 26
+  offset: 0, 0
+  index: -1
