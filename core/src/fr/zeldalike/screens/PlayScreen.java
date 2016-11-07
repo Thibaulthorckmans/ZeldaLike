@@ -34,6 +34,7 @@ public class PlayScreen implements Screen {
 	private TmxMapLoader mapLoader;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
+	int[] layers, firstPlan;
 
 	// Box2D variables
 	private World world;
@@ -57,7 +58,7 @@ public class PlayScreen implements Screen {
 
 		// Load our map and setup our map renderer
 		mapLoader = new TmxMapLoader();
-		map = mapLoader.load("Maps/villageModifie.tmx");
+		map = mapLoader.load("Maps/Village.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
 
 		// Initially set our gameCam to be centered correctly at the start of the game
@@ -76,6 +77,10 @@ public class PlayScreen implements Screen {
 
 		// Define if the avatar is moving or not
 		Constants.isMoving = false;
+		
+		// Set the layers
+		layers = new int[] {0, 1, 2 , 3, 4, 5, 6, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+		firstPlan = new int[] {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 44};
 	}
 
 	public TextureAtlas getAtlas() {
@@ -140,7 +145,7 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Render our game map
-		renderer.render();
+		renderer.render(layers);
 
 		// Render our Box2DDebugLines
 		//b2dr.render(world, gameCam.combined);
@@ -150,7 +155,10 @@ public class PlayScreen implements Screen {
 		player.draw(game.batch);
 		game.batch.end();
 
-		// Set our batch to now drax the HUD camera sees
+		// Render our game map
+		renderer.render(firstPlan);
+		
+		// Set our batch to now draw the HUD camera sees
 		//game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		//hud.stage.draw();
 	}
