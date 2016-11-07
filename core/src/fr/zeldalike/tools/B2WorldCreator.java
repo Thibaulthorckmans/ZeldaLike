@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import fr.zeldalike.assets.Constants;
-import fr.zeldalike.game.Main;
 //import fr.zeldalike.sprites.Brick;
 //import fr.zeldalike.sprites.Coin;
 
