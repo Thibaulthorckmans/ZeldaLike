@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import fr.zeldalike.assets.Constants;
 import fr.zeldalike.game.Main;
+import fr.zeldalike.scenes.Hud;
 //import fr.zeldalike.scenes.Hud;
 import fr.zeldalike.sprites.Avatar;
 import fr.zeldalike.tools.B2WorldCreator;

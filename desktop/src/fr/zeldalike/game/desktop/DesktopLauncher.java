@@ -1,5 +1,6 @@
 package fr.zeldalike.game.desktop;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import fr.zeldalike.game.Main;
@@ -9,7 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		
 		config.title = "Zelda - Lonk's adventure !";
-		//config.addIcon("Atom.png", FileType.Internal);
+		config.addIcon("zeldalike.png", FileType.Internal);
 		config.width = 1200;
 		config.height = 800;
 		
