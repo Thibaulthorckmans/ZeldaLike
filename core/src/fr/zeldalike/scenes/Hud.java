@@ -20,33 +20,33 @@ import fr.zeldalike.assets.Constants;
 public class Hud implements Disposable{
 	public Stage stage;
 	private Viewport viewport;
-	
+
 	MapLayer calque;
 	TextureAtlas atlasHeart;
 	Sprite heart;
-	
+
 	Label heartLabel;
-	
+
 	public Hud(SpriteBatch sb) {		
 		viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, new OrthographicCamera());
 		stage = new Stage(viewport, sb);
-		
+
 		atlasHeart = new TextureAtlas("Sprites/items.pack");
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		Table table = new Table();
 		table.top();
 		table.setFillParent(true);
-		
+
 		heartLabel = new Label("Life <3 <3 <3", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
 		table.defaults().align(Align.left);
 		table.add(heartLabel).expandX().padLeft(5);
-		
+
 		stage.addActor(table);
 	}
 

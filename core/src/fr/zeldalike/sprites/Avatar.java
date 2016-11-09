@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -41,7 +42,6 @@ public class Avatar extends Sprite {
 
 		stateTimer = 0;
 
-		
 		walkLeft = new Animation(0.1f, defineAnimation(0, 6, 20, 0, 20, 25)); // Define the "walk to the left" animation
 		walkRight = new Animation(0.1f, defineAnimation(7, 13, 20, 0, 20, 25)); // Define the "walk to the right" animation
 		walkDown = new Animation(0.1f, defineAnimation(14, 20, 20, 0, 20, 25)); // Define the "walk down" animation
@@ -51,10 +51,7 @@ public class Avatar extends Sprite {
 		standDown = new Animation(0, new TextureRegion(getTexture(), 340, 0, 20, 25)); // Define the "look down" animation
 		standUp = new Animation(0, new TextureRegion(getTexture(), 480, 0, 20, 25)); // Define the "look up" animation
 
-		// Define the "attack" animation
-//		for(int i = 12; i < 18; i++)
-//			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
-//		attack = new Animation(0.1f, frames);
+		attack = new Animation(0.1f, defineAnimation(12, 18, 20, 0, 20, 25)); // Define the "attack" animation
 
 		//Texture de départ
 		avatarStand = new TextureRegion(getTexture(), 0, 0, 20, 25);
@@ -63,6 +60,33 @@ public class Avatar extends Sprite {
 		defineAvatar();
 		setBounds(0, 0, 18/Constants.PPM, 23/Constants.PPM);
 		setRegion(avatarStand);
+	}
+
+	public void handleInput(float dt) {
+		// Control our player with immediate impulses when key pressed and stop when nothing is pressed
+		if (Gdx.input.isKeyPressed(Input.Keys.UP) && b2body.getLinearVelocity().y <= 0.5f) {
+			b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
+
+		} else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && b2body.getLinearVelocity().y >= -0.5f) {
+			b2body.applyLinearImpulse(new Vector2(0, -1), b2body.getWorldCenter(), true);
+
+		} else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 0.5f) {
+			b2body.applyLinearImpulse(new Vector2(1, 0), b2body.getWorldCenter(), true);
+
+		} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -0.5f) {
+			b2body.applyLinearImpulse(new Vector2(-1, 0), b2body.getWorldCenter(), true);
+
+		} else {
+			b2body.setLinearVelocity(new Vector2(0, 0));
+		}
+	}
+
+	public void isMoving() {
+		if(b2body.getLinearVelocity().x==0 && b2body.getLinearVelocity().y==0) {
+			Constants.isMoving = false;
+		} else {
+			Constants.isMoving = true;
+		}
 	}
 
 	public void update(float dt) {
@@ -115,26 +139,35 @@ public class Avatar extends Sprite {
 	}
 
 	private State getState() {
-		if(b2body.getLinearVelocity().y > 0)
+		if(b2body.getLinearVelocity().y > 0) {
 			return State.UP;
-		if(b2body.getLinearVelocity().y < 0)
+		}
+		if(b2body.getLinearVelocity().y < 0) {
 			return State.DOWN;
-		if(b2body.getLinearVelocity().x > 0)
+		}
+		if(b2body.getLinearVelocity().x > 0) {
 			return State.RIGHT;
-		if(b2body.getLinearVelocity().x < 0)
+		}
+		if(b2body.getLinearVelocity().x < 0) {
 			return State.LEFT;
+		}
 
-		if(!Constants.isMoving && previousState==State.UP)
+		if(!Constants.isMoving && previousState==State.UP) {
 			return State.STANDUP;
-		if(!Constants.isMoving && previousState==State.DOWN)
+		}
+		if(!Constants.isMoving && previousState==State.DOWN) {
 			return State.STANDDOWN;
-		if(!Constants.isMoving && previousState==State.RIGHT)
+		}
+		if(!Constants.isMoving && previousState==State.RIGHT) {
 			return State.STANDRIGHT;
-		if(!Constants.isMoving && previousState==State.LEFT)
+		}
+		if(!Constants.isMoving && previousState==State.LEFT) {
 			return State.STANDLEFT;
+		}
 
-		if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 			return State.ATTACK;
+		}
 
 		return currentState;
 	}
@@ -152,10 +185,10 @@ public class Avatar extends Sprite {
 		fdef.shape = shape;
 		b2body.createFixture(fdef);
 	}
-	
+
 	public Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
 		Array<TextureRegion> frames = new Array<TextureRegion>();
-		
+
 		for(int i = init; i < limit; i++) {
 			frames.add(new TextureRegion(getTexture(), i * posX, posY, width, height));
 		}
