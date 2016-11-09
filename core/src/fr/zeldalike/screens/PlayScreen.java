@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.zeldalike.assets.Constants;
 import fr.zeldalike.game.Main;
 import fr.zeldalike.scenes.Hud;
-//import fr.zeldalike.scenes.Hud;
 import fr.zeldalike.sprites.Avatar;
 import fr.zeldalike.tools.B2WorldCreator;
 
@@ -29,7 +28,7 @@ public class PlayScreen implements Screen {
 	// Camera variables
 	private OrthographicCamera gameCam;
 	private Viewport gamePort;
-	//private Hud hud;
+	private Hud hud;
 
 	// Tiled map variables
 	private TmxMapLoader mapLoader;
@@ -55,7 +54,7 @@ public class PlayScreen implements Screen {
 		gamePort = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gameCam);
 
 		// Create our game HUD for scores/times /level info
-		//hud = new Hud(game.batch);
+		hud = new Hud(game.batch);
 
 		// Load our map and setup our map renderer
 		mapLoader = new TmxMapLoader();
@@ -160,8 +159,8 @@ public class PlayScreen implements Screen {
 		renderer.render(firstPlan);
 		
 		// Set our batch to now draw the HUD camera sees
-		//game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-		//hud.stage.draw();
+		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+		hud.stage.draw();
 	}
 
 	@Override

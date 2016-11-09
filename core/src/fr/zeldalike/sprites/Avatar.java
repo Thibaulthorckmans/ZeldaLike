@@ -44,26 +44,22 @@ public class Avatar extends Sprite {
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 
 		// Define the "walk to the left" animation
-		for(int i = 0; i < 6; i++)
-			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
+		frames = defineAnimation(walkLeft, 0, 6, 20, 0, 20, 25);
 		walkLeft = new Animation(0.1f, frames);
 		frames.clear();
 
 		// Define the "walk to the right" animation
-		for (int i = 7; i < 13; i++)
-			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
+		frames = defineAnimation(walkRight, 7, 13, 20, 0, 20, 25);
 		walkRight = new Animation(0.1f, frames);
 		frames.clear();
 
 		// Define the "walk down" animation
-		for(int i = 14; i < 20; i++)
-			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
+		frames = defineAnimation(walkDown, 14, 20, 20, 0, 20, 25);
 		walkDown = new Animation(0.1f, frames);
 		frames.clear();
 
 		// Define the "walk up" animation
-		for(int i = 21; i < 27; i++)
-			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
+		frames = defineAnimation(walkUp, 21, 27, 20, 0, 20, 25);
 		walkUp = new Animation(0.1f, frames);
 		frames.clear();
 
@@ -84,7 +80,7 @@ public class Avatar extends Sprite {
 
 		// Define the "look up" animation
 		frames.add(new TextureRegion(getTexture(), 24 * 20, 0, 20, 25));
-		standUp= new Animation(0.1f, frames);
+		standUp = new Animation(0.1f, frames);
 		frames.clear();
 
 		// Define the "attack" animation
@@ -149,7 +145,7 @@ public class Avatar extends Sprite {
 		return region;
 	}
 
-	public State getState() {
+	private State getState() {
 		if(b2body.getLinearVelocity().y > 0)
 			return State.UP;
 		if(b2body.getLinearVelocity().y < 0)
@@ -174,7 +170,7 @@ public class Avatar extends Sprite {
 		return currentState;
 	}
 
-	public void defineAvatar() {
+	private void defineAvatar() {
 		BodyDef bdef = new BodyDef();
 		bdef.position.set(375/Constants.PPM, 610/Constants.PPM);
 		bdef.type = BodyDef.BodyType.DynamicBody;
@@ -186,6 +182,15 @@ public class Avatar extends Sprite {
 
 		fdef.shape = shape;
 		b2body.createFixture(fdef);
+	}
+	
+	public Array<TextureRegion> defineAnimation(Animation anim, int init, int limit, int posX, int posY, int width, int height) {
+		Array<TextureRegion> frames = new Array<TextureRegion>();
+		
+		for(int i = init; i < limit; i++) {
+			frames.add(new TextureRegion(getTexture(), i * posX, posY, width, height));
+		}
 
+		return frames;
 	}
 }
