@@ -41,53 +41,22 @@ public class Avatar extends Sprite {
 
 		stateTimer = 0;
 
-		Array<TextureRegion> frames = new Array<TextureRegion>();
-
-		// Define the "walk to the left" animation
-		frames = defineAnimation(walkLeft, 0, 6, 20, 0, 20, 25);
-		walkLeft = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "walk to the right" animation
-		frames = defineAnimation(walkRight, 7, 13, 20, 0, 20, 25);
-		walkRight = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "walk down" animation
-		frames = defineAnimation(walkDown, 14, 20, 20, 0, 20, 25);
-		walkDown = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "walk up" animation
-		frames = defineAnimation(walkUp, 21, 27, 20, 0, 20, 25);
-		walkUp = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "look left" animation
-		frames.add(new TextureRegion(getTexture(), 3 * 20, 0, 20, 25));
-		standLeft = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "look right" animation
-		frames.add(new TextureRegion(getTexture(), 10 * 20, 0, 20, 25));
-		standRight = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "look down" animation
-		frames.add(new TextureRegion(getTexture(), 17 * 20, 0, 20, 25));
-		standDown = new Animation(0.1f, frames);
-		frames.clear();
-
-		// Define the "look up" animation
-		frames.add(new TextureRegion(getTexture(), 24 * 20, 0, 20, 25));
-		standUp = new Animation(0.1f, frames);
-		frames.clear();
+		
+		walkLeft = new Animation(0.1f, defineAnimation(0, 6, 20, 0, 20, 25)); // Define the "walk to the left" animation
+		walkRight = new Animation(0.1f, defineAnimation(7, 13, 20, 0, 20, 25)); // Define the "walk to the right" animation
+		walkDown = new Animation(0.1f, defineAnimation(14, 20, 20, 0, 20, 25)); // Define the "walk down" animation
+		walkUp = new Animation(0.1f, defineAnimation(21, 27, 20, 0, 20, 25)); // Define the "walk up" animation
+		standLeft = new Animation(0, new TextureRegion(getTexture(), 60, 0, 20, 25)); // Define the "look left" animation
+		standRight = new Animation(0, new TextureRegion(getTexture(), 200, 0, 20, 25)); // Define the "look right" animation
+		standDown = new Animation(0, new TextureRegion(getTexture(), 340, 0, 20, 25)); // Define the "look down" animation
+		standUp = new Animation(0, new TextureRegion(getTexture(), 480, 0, 20, 25)); // Define the "look up" animation
 
 		// Define the "attack" animation
-		for(int i = 12; i < 18; i++)
-			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
-		attack = new Animation(0.1f, frames);
+//		for(int i = 12; i < 18; i++)
+//			frames.add(new TextureRegion(getTexture(), i * 20, 0, 20, 25));
+//		attack = new Animation(0.1f, frames);
 
+		//Texture de départ
 		avatarStand = new TextureRegion(getTexture(), 0, 0, 20, 25);
 
 		// Define our avatar and set his sprite bounds
@@ -184,7 +153,7 @@ public class Avatar extends Sprite {
 		b2body.createFixture(fdef);
 	}
 	
-	public Array<TextureRegion> defineAnimation(Animation anim, int init, int limit, int posX, int posY, int width, int height) {
+	public Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 		
 		for(int i = init; i < limit; i++) {
