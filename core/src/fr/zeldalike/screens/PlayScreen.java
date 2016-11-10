@@ -15,6 +15,7 @@ import fr.zeldalike.tools.B2WorldCreator;
 
 public class PlayScreen implements Screen {
 	private Main game;
+	// HUD variables
 	private Hud hud;
 	// Camera variables
 	private Camera mainCam;
@@ -31,8 +32,6 @@ public class PlayScreen implements Screen {
 		this.game = game;
 		mainCam = new Camera();
 		mainMap = new Map();
-
-		// Create our game HUD for scores/times /level info
 		hud = new Hud(game.batch);
 
 		// Create our Box2D world, setting no gravity and allow bodies to sleep
@@ -73,7 +72,7 @@ public class PlayScreen implements Screen {
 		player.update(dt);
 		player.isMoving();
 
-		// Attach our gameCam to our players coordinates
+		// Attach our gameCam to our player's coordinates
 		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
 		mainCam.update();
 
@@ -83,7 +82,6 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		// Separate our update logic from render
 		update(delta);
 
 		// Clear the game screen with black
@@ -96,6 +94,7 @@ public class PlayScreen implements Screen {
 		// Render our Box2DDebugLines
 		//b2dr.render(world, gameCam.combined);
 
+		// Render our player
 		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
 		game.batch.begin();
 		player.draw(game.batch);

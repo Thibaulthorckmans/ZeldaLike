@@ -21,14 +21,14 @@ public class Avatar extends Sprite {
 	public enum State { UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACK};
 	public State currentState;
 	public State previousState;
-
 	// Animation variables
 	private Animation walkRight, walkLeft, walkUp, walkDown;
 	private Animation standRight, standLeft, standUp, standDown;
 	private Animation attack;
-
+	// Box2D variables
 	public World world;
 	public Body b2body;
+	// Other variables
 	private TextureRegion avatarStand;
 	private float stateTimer;
 
@@ -53,7 +53,7 @@ public class Avatar extends Sprite {
 
 		attack = new Animation(0.1f, defineAnimation(12, 18, 20, 0, 20, 25)); // Define the "attack" animation
 
-		//Texture de départ
+		// Initial texture
 		avatarStand = new TextureRegion(getTexture(), 0, 0, 20, 25);
 
 		// Define our avatar and set his sprite bounds
@@ -63,7 +63,7 @@ public class Avatar extends Sprite {
 	}
 
 	public void handleInput(float dt) {
-		// Control our player with immediate impulses when key pressed and stop when nothing is pressed
+		// Control our player with immediate impulses when a key is pressed and stop when nothing is pressed
 		if (Gdx.input.isKeyPressed(Input.Keys.UP) && b2body.getLinearVelocity().y <= 0.5f) {
 			b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
 
@@ -82,6 +82,7 @@ public class Avatar extends Sprite {
 	}
 
 	public void isMoving() {
+		// Change the constant on false if the player stop moving
 		if(b2body.getLinearVelocity().x==0 && b2body.getLinearVelocity().y==0) {
 			Constants.isMoving = false;
 		} else {
@@ -174,12 +175,16 @@ public class Avatar extends Sprite {
 
 	private void defineAvatar() {
 		BodyDef bdef = new BodyDef();
-		bdef.position.set(375/Constants.PPM, 610/Constants.PPM);
-		bdef.type = BodyDef.BodyType.DynamicBody;
-		b2body = world.createBody(bdef);
-
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
+		
+		// Set the player's initial position and the type of body used
+		bdef.position.set(375/Constants.PPM, 610/Constants.PPM);
+		bdef.type = BodyDef.BodyType.DynamicBody;
+		
+		b2body = world.createBody(bdef);
+
+		// Set the body form, a circle with a radius of 7
 		shape.setRadius(7f/Constants.PPM);
 
 		fdef.shape = shape;

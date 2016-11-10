@@ -17,15 +17,23 @@ import fr.zeldalike.assets.Constants;
 public class B2WorldCreator {
 
 	public B2WorldCreator(World world, TiledMap map) {
+		BodyDef bdef = new BodyDef();
+		PolygonShape shape = new PolygonShape();
+		FixtureDef fdef = new FixtureDef();
+		Body body;
 		
-		collisionBlock(world, map, 36); // Cliff bodies & fixtures
-		collisionBlock(world, map, 37); // Tree bodies & fixtures
-		collisionBlock(world, map, 38); // Hedge bodies & fixtures
-		collisionBlock(world, map, 39); // Fence bodies & fixtures
-		collisionBlock(world, map, 40); // Bush bodies & fixtures
-		collisionBlock(world, map, 41); // Building bodies & fixtures
-		collisionBlock(world, map, 42); // Object bodies & fixtures
-		collisionBlock(world, map, 43); // Exit bodies & fixtures
+		for(MapObject object : map.getLayers().get("Collision").getObjects().getByType(RectangleMapObject.class)) {
+			Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+			bdef.type = BodyDef.BodyType.StaticBody;
+			bdef.position.set((rect.getX() + rect.getWidth()/2)/Constants.PPM, (rect.getY() + rect.getHeight()/2)/Constants.PPM);
+
+			body = world.createBody(bdef);
+
+			shape.setAsBox((rect.getWidth()/2)/Constants.PPM, (rect.getHeight()/2)/Constants.PPM);
+			fdef.shape = shape;
+			body.createFixture(fdef);
+		}
 		
 //		// Create bricks bodies/fixtures
 //		for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
@@ -40,25 +48,5 @@ public class B2WorldCreator {
 //
 //				new Coin(world, map, rect);
 //		}
-	}
-	
-	public void collisionBlock(World world, TiledMap map, int id) {
-		BodyDef bdef = new BodyDef();
-		PolygonShape shape = new PolygonShape();
-		FixtureDef fdef = new FixtureDef();
-		Body body;
-		
-		for(MapObject object : map.getLayers().get(id).getObjects().getByType(RectangleMapObject.class)) {
-			Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-			bdef.type = BodyDef.BodyType.StaticBody;
-			bdef.position.set((rect.getX() + rect.getWidth()/2)/Constants.PPM, (rect.getY() + rect.getHeight()/2)/Constants.PPM);
-
-			body = world.createBody(bdef);
-
-			shape.setAsBox((rect.getWidth()/2)/Constants.PPM, (rect.getHeight()/2)/Constants.PPM);
-			fdef.shape = shape;
-			body.createFixture(fdef);
-		}
 	}
 }
