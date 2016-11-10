@@ -66,11 +66,6 @@ public class PlayScreen implements Screen {
 		// Handle user input first
 		player.handleInput(dt);
 		
-//		if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-//			mainMap.dispose();
-//			mainMap = new Map("donjonTest");
-//		}
-		
 		// Takes 1 step in the physics simulation (60 times per second)
 		world.step(1/60f, 6, 2);
 
