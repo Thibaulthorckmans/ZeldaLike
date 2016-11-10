@@ -21,7 +21,7 @@ public class Map {
 
 	public void setMap(String mapName) {
 		mapLoader = new TmxMapLoader();
-		this.map = mapLoader.load("Maps/" + mapName + ".tmx");;
+		this.map = mapLoader.load("Maps/" + mapName + ".tmx");
 	}
 	
 	public int[] getBackPlan() {
@@ -37,10 +37,10 @@ public class Map {
 		firstPlan = new int[] {37, 38, 39};
 	}
 
-	public Map() {
+	public Map(String mapName) {
 		// Load our map and setup the renderer
 		mapLoader = new TmxMapLoader();
-		map = mapLoader.load("Maps/Village.tmx");
+		map = mapLoader.load("Maps/" + mapName + ".tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
 	}
 

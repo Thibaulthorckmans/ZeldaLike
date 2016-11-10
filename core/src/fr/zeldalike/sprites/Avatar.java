@@ -61,7 +61,7 @@ public class Avatar extends Sprite {
 		setBounds(0, 0, 18/Constants.PPM, 23/Constants.PPM);
 		setRegion(avatarStand);
 	}
-
+	
 	public void handleInput(float dt) {
 		// Control our player with immediate impulses when a key is pressed and stop when nothing is pressed
 		if (Gdx.input.isKeyPressed(Input.Keys.UP) && b2body.getLinearVelocity().y <= 0.5f) {
@@ -79,6 +79,7 @@ public class Avatar extends Sprite {
 		} else {
 			b2body.setLinearVelocity(new Vector2(0, 0));
 		}
+		
 	}
 
 	public void isMoving() {
@@ -169,7 +170,7 @@ public class Avatar extends Sprite {
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
 			return State.ATTACK;
 		}
-
+	
 		return currentState;
 	}
 
