@@ -7,5 +7,12 @@ public class Constants {
 	public static final int V_HEIGHT = 333;
 	// Player's movement variables
 	public static boolean isMoving;
+	// 
+	public static final short DEFAULT_BIT = 1;
+	public static final short LINK_BIT = 2;
+	public static final short PLANT_BIT = 4;
+	public static final short RUBY_BIT = 8;
+	public static final short DESTROYED_PLANT = 16;
+	public static final short NPC_BIT = 32;
 
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -46,6 +47,7 @@ public class Avatar extends Sprite {
 		walkRight = new Animation(0.1f, defineAnimation(7, 13, 20, 0, 20, 25)); // Define the "walk to the right" animation
 		walkDown = new Animation(0.1f, defineAnimation(14, 20, 20, 0, 20, 25)); // Define the "walk down" animation
 		walkUp = new Animation(0.1f, defineAnimation(21, 27, 20, 0, 20, 25)); // Define the "walk up" animation
+		
 		standLeft = new Animation(0, new TextureRegion(getTexture(), 60, 0, 20, 25)); // Define the "look left" animation
 		standRight = new Animation(0, new TextureRegion(getTexture(), 200, 0, 20, 25)); // Define the "look right" animation
 		standDown = new Animation(0, new TextureRegion(getTexture(), 340, 0, 20, 25)); // Define the "look down" animation
@@ -187,9 +189,19 @@ public class Avatar extends Sprite {
 
 		// Set the body form, a circle with a radius of 7
 		shape.setRadius(7f/Constants.PPM);
+		
+		fdef.filter.categoryBits = Constants.LINK_BIT;
+		fdef.filter.maskBits = Constants.DEFAULT_BIT | Constants.NPC_BIT | Constants.RUBY_BIT | Constants.PLANT_BIT;
 
 		fdef.shape = shape;
 		b2body.createFixture(fdef);
+		
+		EdgeShape head = new EdgeShape();
+		head.set(new Vector2(-2/Constants.PPM, 7/Constants.PPM), new Vector2(2/Constants.PPM, 7/Constants.PPM));
+		fdef.shape = head;
+		fdef.isSensor = true;
+		
+		b2body.createFixture(fdef).setUserData("head");
 	}
 
 	public Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {

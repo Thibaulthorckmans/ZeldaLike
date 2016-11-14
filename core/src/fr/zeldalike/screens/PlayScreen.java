@@ -2,16 +2,21 @@ package fr.zeldalike.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 import fr.zeldalike.assets.Constants;
 import fr.zeldalike.game.Main;
 import fr.zeldalike.scenes.Hud;
 import fr.zeldalike.sprites.Avatar;
+import fr.zeldalike.sprites.Villager;
 import fr.zeldalike.tools.B2WorldCreator;
+import fr.zeldalike.tools.MusicLoader;
+import fr.zeldalike.tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
 	private Main game;
@@ -23,9 +28,14 @@ public class PlayScreen implements Screen {
 	private Map mainMap;
 	// Box2D variables
 	private World world;
+	private Box2DDebugRenderer b2dr;
 	// Player variables
 	private TextureAtlas atlas;
 	private Avatar player;
+	// NPc variables
+	private Villager villager;
+	// Music variables
+	private Music music;
 
 
 	public PlayScreen(Main game) {
@@ -38,14 +48,26 @@ public class PlayScreen implements Screen {
 		world = new World(new Vector2(0, 0), true);
 
 		// Allows for debug lines of our Box2D world
-		//b2dr = new Box2DDebugRenderer();
+		b2dr = new Box2DDebugRenderer();
 
 		new B2WorldCreator(world, mainMap.getMap());
 
 		// Create the avatar in our game world
 		atlas = new TextureAtlas("Sprites/Link.pack");
 		player = new Avatar(world, this);
+		
+		world.setContactListener(new WorldContactListener());
+		
+		// Launch our main theme music, set on looping and is volume
+		music = MusicLoader.manager.get("Audio/Music/MainTheme.ogg", Music.class);
+		music.setLooping(true);
+		music.setVolume(10/Constants.PPM);
+		music.play();
 
+		// 
+		villager = new Villager(this, 360, 610);
+		villager.movePath();
+		
 		// Define if the avatar is moving or not
 		Constants.isMoving = false;
 
@@ -70,7 +92,9 @@ public class PlayScreen implements Screen {
 		world.step(1/60f, 6, 2);
 
 		player.update(dt);
+		villager.update(dt);
 		player.isMoving();
+		villager.isMoving();
 
 		// Attach our gameCam to our player's coordinates
 		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
@@ -92,12 +116,13 @@ public class PlayScreen implements Screen {
 		mainMap.renderLayers(mainMap.getBackPlan());
 
 		// Render our Box2DDebugLines
-		//b2dr.render(world, gameCam.combined);
+		b2dr.render(world, mainCam.getGameCam().combined);
 
 		// Render our player
 		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
 		game.batch.begin();
 		player.draw(game.batch);
+		villager.draw(game.batch);
 		game.batch.end();
 
 		// Render our first plan layers
@@ -110,7 +135,12 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
+		// Update our game viewport
 		mainCam.resize(width, height);
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 
 	@Override

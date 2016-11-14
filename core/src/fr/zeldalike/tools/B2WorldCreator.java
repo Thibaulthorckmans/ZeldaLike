@@ -11,8 +11,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import fr.zeldalike.assets.Constants;
-//import fr.zeldalike.sprites.Brick;
-//import fr.zeldalike.sprites.Coin;
+import fr.zeldalike.sprites.Plant;
+import fr.zeldalike.sprites.Ruby;
 
 public class B2WorldCreator {
 
@@ -35,18 +35,18 @@ public class B2WorldCreator {
 			body.createFixture(fdef);
 		}
 		
-//		// Create bricks bodies/fixtures
-//		for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+		// Create plants bodies/fixtures
+		for(MapObject object : map.getLayers().get("Plant Collision").getObjects().getByType(RectangleMapObject.class)) {
+				Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+				new Plant(world, map, rect);
+		}
+
+//		// Create rubis bodies/fixtures
+//		for(MapObject object : map.getLayers().get("").getObjects().getByType(RectangleMapObject.class)) {
 //				Rectangle rect = ((RectangleMapObject) object).getRectangle();
 //
-//				new Brick(world, map, rect);
-//		}
-//
-//		// Create coins bodies/fixtures
-//		for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
-//				Rectangle rect = ((RectangleMapObject) object).getRectangle();
-//
-//				new Coin(world, map, rect);
+//				new Ruby(world, map, rect);
 //		}
 	}
 }
