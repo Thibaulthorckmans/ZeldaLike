@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -13,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import fr.zeldalike.assets.Constants;
 import fr.zeldalike.game.Main;
-//import fr.zeldalike.scenes.Hud;
+import fr.zeldalike.scenes.Hud;
 import fr.zeldalike.sprites.Avatar;
 import fr.zeldalike.sprites.Villager;
 import fr.zeldalike.tools.B2WorldCreator;
@@ -23,7 +21,7 @@ import fr.zeldalike.tools.WorldContactListener;
 public class PlayScreen implements Screen {
 	private Main game;
 	// HUD variables
-//	private Hud hud;
+	private Hud hud;
 	// Camera variables
 	private Camera mainCam;
 	// Map variables
@@ -39,16 +37,11 @@ public class PlayScreen implements Screen {
 	// Music variables
 	private Music music;
 
-	
-	private TextureAtlas heartAtlas;
-	private SpriteBatch HUDBatch;
-	private Sprite heart1, heart2, heart3;
-
 	public PlayScreen(Main game) {
 		this.game = game;
 		mainCam = new Camera();
 		mainMap = new Map("Village");
-//		hud = new Hud(game.batch);
+		hud = new Hud(game.batch);
 
 		// Create our Box2D world, setting no gravity and allow bodies to sleep
 		world = new World(new Vector2(0, 0), true);
@@ -79,24 +72,6 @@ public class PlayScreen implements Screen {
 
 		// Set the layers
 		mainMap.setLayers();
-		
-
-		
-		heartAtlas = new TextureAtlas("Sprites/items.pack");
-		
-		HUDBatch = new SpriteBatch();
-		heart1 = new Sprite(heartAtlas.findRegion("heart", 1));
-		heart1.setPosition(5, 760);
-		heart1.setSize(60, 60);
-		heart1.setScale(0.5f);
-		heart2 = new Sprite(heartAtlas.findRegion("heart", 1));
-		heart2.setPosition(35, 760);
-		heart2.setSize(60, 60);
-		heart2.setScale(0.5f);
-		heart3 = new Sprite(heartAtlas.findRegion("heart", 2));
-		heart3.setPosition(65, 760);
-		heart3.setSize(60, 60);
-		heart3.setScale(0.5f);
 	}
 
 	public TextureAtlas getAtlas() {
@@ -152,16 +127,9 @@ public class PlayScreen implements Screen {
 		// Render our first plan layers
 		mainMap.renderLayers(mainMap.getFirstPlan());
 
-//		// Set our batch to now draw the HUD camera sees
-//		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-//		hud.stage.draw();
-
-		//Display HUD (Score & Lives)
-		HUDBatch.begin();
-			heart1.draw(HUDBatch);
-			heart2.draw(HUDBatch);
-			heart3.draw(HUDBatch);
-		HUDBatch.end();
+		// Set our batch to now draw the HUD camera sees
+		game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+		hud.getStage().draw();
 	}
 
 	@Override
@@ -193,6 +161,6 @@ public class PlayScreen implements Screen {
 	public void dispose() {
 		mainMap.dispose();
 		world.dispose();
-//		hud.dispose();
+		hud.dispose();
 	}
 }
