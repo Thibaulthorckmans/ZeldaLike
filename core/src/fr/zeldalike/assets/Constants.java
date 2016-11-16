@@ -14,5 +14,6 @@ public class Constants {
 	public static final short RUBY_BIT = 8;
 	public static final short DESTROYED_PLANT = 16;
 	public static final short NPC_BIT = 32;
-
+	//
+	public static final int MAX_HEALTH = 20;
 }
