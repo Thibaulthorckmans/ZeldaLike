@@ -1,6 +1,7 @@
 package fr.zeldalike.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -101,6 +102,14 @@ public class PlayScreen implements Screen {
 
 		// Tell our renderer to draw only what our camera can see in our game world
 		mainMap.setView(mainCam.getGameCam());
+		
+		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+			this.hud.damage(1);
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+			this.hud.cure(1);
+		}
 	}
 
 	@Override
