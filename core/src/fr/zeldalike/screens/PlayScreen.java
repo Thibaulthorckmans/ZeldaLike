@@ -40,43 +40,43 @@ public class PlayScreen implements Screen {
 
 	public PlayScreen(Main game) {
 		this.game = game;
-		mainCam = new Camera();
-		mainMap = new Map("Village");
-		hud = new Hud(game.batch);
+		this.mainCam = new Camera();
+		this.mainMap = new Map("Village");
+		this.hud = new Hud(game.batch);
 
 		// Create our Box2D world, setting no gravity and allow bodies to sleep
-		world = new World(new Vector2(0, 0), true);
+		this.world = new World(new Vector2(0, 0), true);
 
 		// Allows for debug lines of our Box2D world
-		b2dr = new Box2DDebugRenderer();
+		this.b2dr = new Box2DDebugRenderer();
 
-		new B2WorldCreator(world, mainMap.getMap());
+		new B2WorldCreator(this.world, this.mainMap.getMap());
 
 		// Create the avatar in our game world
-		atlas = new TextureAtlas("Sprites/Link.pack");
-		player = new Avatar(world, this);
+		this.atlas = new TextureAtlas("Sprites/Link.pack");
+		this.player = new Avatar(this.world, this);
 		
-		world.setContactListener(new WorldContactListener());
+		this.world.setContactListener(new WorldContactListener());
 		
 		// Launch our main theme music, set on looping and is volume
-		music = MusicLoader.manager.get("Audio/Music/MainTheme.ogg", Music.class);
-		music.setLooping(true);
-		music.setVolume(10/Constants.PPM);
-		music.play();
+		this.music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
+		this.music.setLooping(true);
+		this.music.setVolume(10/Constants.PPM);
+		this.music.play();
 
 		// 
-		villager = new Villager(this, 360, 610);
-		villager.movePath();
+		this.villager = new Villager(this, 360, 610);
+		this.villager.movePath();
 		
 		// Define if the avatar is moving or not
 		Constants.isMoving = false;
 
 		// Set the layers
-		mainMap.setLayers();
+		this.mainMap.setLayers();
 	}
 
 	public TextureAtlas getAtlas() {
-		return atlas;
+		return this.atlas;
 	}
 
 	@Override
@@ -85,23 +85,24 @@ public class PlayScreen implements Screen {
 	}
 
 	public void update(float dt) {
+		
 		// Handle user input first
-		player.handleInput(dt);
+		this.player.handleInput(dt);
 		
 		// Takes 1 step in the physics simulation (60 times per second)
-		world.step(1/60f, 6, 2);
+		this.world.step(1/60f, 6, 2);
 
-		player.update(dt);
-		villager.update(dt);
-		player.isMoving();
-		villager.isMoving();
+		this.player.update(dt);
+		this.villager.update(dt);
+		this.player.isMoving();
+		this.villager.isMoving();
 
 		// Attach our gameCam to our player's coordinates
-		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
-		mainCam.update();
+		this.mainCam.setPosition(this.player.b2body.getPosition().x, this.player.b2body.getPosition().y);
+		this.mainCam.update();
 
 		// Tell our renderer to draw only what our camera can see in our game world
-		mainMap.setView(mainCam.getGameCam());
+		this.mainMap.setView(this.mainCam.getGameCam());
 		
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
@@ -114,41 +115,46 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		update(delta);
+		this.update(delta);
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+			//this.mainMap.getMap().dispose();
+			this.mainMap.setMap("donjonTest");
+		}
 
 		// Clear the game screen with black
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Render our back plan layers
-		mainMap.renderLayers(mainMap.getBackPlan());
+		this.mainMap.renderLayers(this.mainMap.getBackPlan());
 
 		// Render our Box2DDebugLines
-		b2dr.render(world, mainCam.getGameCam().combined);
+		this.b2dr.render(this.world, this.mainCam.getGameCam().combined);
 
 		// Render our player
-		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
-		game.batch.begin();
-		player.draw(game.batch);
-		villager.draw(game.batch);
-		game.batch.end();
+		this.game.batch.setProjectionMatrix(this.mainCam.getGameCam().combined);
+		this.game.batch.begin();
+		this.player.draw(this.game.batch);
+		this.villager.draw(this.game.batch);
+		this.game.batch.end();
 
 		// Render our first plan layers
-		mainMap.renderLayers(mainMap.getFirstPlan());
+		this.mainMap.renderLayers(this.mainMap.getFirstPlan());
 
 		// Set our batch to now draw the HUD camera sees
-		game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
-		hud.getStage().draw();
+		this.game.batch.setProjectionMatrix(this.hud.getStage().getCamera().combined);
+		this.hud.getStage().draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// Update our game viewport
-		mainCam.resize(width, height);
+		this.mainCam.resize(width, height);
 	}
 	
 	public World getWorld() {
-		return world;
+		return this.world;
 	}
 
 	@Override
@@ -168,8 +174,8 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		mainMap.dispose();
-		world.dispose();
-		hud.dispose();
+		this.mainMap.dispose();
+		this.world.dispose();
+		this.hud.dispose();
 	}
 }

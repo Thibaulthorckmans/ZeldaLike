@@ -1,5 +1,8 @@
 package fr.zeldalike.screens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -15,45 +18,94 @@ public class Map {
 	// Layers variables
 	int[] backPlan, firstPlan;
 
-	public TiledMap getMap() {
-		return map;
+	public Map(String mapName) {
+		// Load our map and setup the renderer
+		this.mapLoader = new TmxMapLoader();
+		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
+		this.renderer = new OrthogonalTiledMapRenderer(this.map, 1/Constants.PPM);
 	}
-
-	public void setMap(String mapName) {
-		mapLoader = new TmxMapLoader();
-		map = mapLoader.load("Maps/" + mapName + ".tmx");
+	
+	public TiledMap getMap() {
+		return this.map;
 	}
 	
 	public int[] getBackPlan() {
-		return backPlan;
+		return this.backPlan;
 	}
 
 	public int[] getFirstPlan() {
-		return firstPlan;
+		return this.firstPlan;
+	}
+
+	public void setMap(String mapName) {
+		this.mapLoader = new TmxMapLoader();
+		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
+		this.renderer.setMap(this.map);
+		this.setLayers();
+	}
+	public void setRenderer() {
+		this.renderer.setMap(this.map);
 	}
 
 	public void setLayers() {
-		backPlan = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-		firstPlan = new int[] {38, 39, 40};
+		this.setBackPlan();
+		this.setFirstPlan();
 	}
+	
+	public void setBackPlan() {
+		int nbLayer = this.map.getLayers().getCount();
+		List<Integer> layers = new ArrayList<Integer>();
 
-	public Map(String mapName) {
-		// Load our map and setup the renderer
-		mapLoader = new TmxMapLoader();
-		map = mapLoader.load("Maps/" + mapName + ".tmx");
-		renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
+		for(int i = 0; i < nbLayer; i++) {
+			String nameLayer = this.map.getLayers().get(i).getName();
+			
+			if(nameLayer.contains("col_") || nameLayer.contains("fp_")) {
+				break;
+			} else {
+				layers.add(i);
+			}
+		}
+		
+		int[] tab = new int[layers.size()];
+		
+		for(int i = 0; i < tab.length; i++) {
+			tab[i] = layers.get(i);
+		}
+		
+		this.backPlan = tab;
+	}
+	
+	public void setFirstPlan() {
+		int nbLayer = this.map.getLayers().getCount();
+		List<Integer> layers = new ArrayList<Integer>();
+
+		for(int i = 0; i < nbLayer; i++) {
+			String nameLayer = this.map.getLayers().get(i).getName();
+			
+			if(nameLayer.contains("fp_")) {
+				layers.add(i);
+			}
+		}
+		
+		int[] tab = new int[layers.size()];
+		
+		for(int i = 0; i < tab.length; i++) {
+			tab[i] =  layers.get(i);
+		}
+		
+		this.firstPlan=  tab;
 	}
 
 	public void setView(OrthographicCamera cam) {
-		renderer.setView(cam);
+		this.renderer.setView(cam);
 	}
 
 	public void dispose() {
-		map.dispose();
-		renderer.dispose();
+		this.map.dispose();
+		this.renderer.dispose();
 	}
 
 	public void renderLayers(int[] layer) {
-		renderer.render(layer);
+		this.renderer.render(layer);
 	}
 }
