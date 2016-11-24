@@ -21,7 +21,7 @@ public class Map {
 
 	public void setMap(String mapName) {
 		mapLoader = new TmxMapLoader();
-		this.map = mapLoader.load("Maps/" + mapName + ".tmx");
+		map = mapLoader.load("Maps/" + mapName + ".tmx");
 	}
 	
 	public int[] getBackPlan() {
@@ -33,8 +33,8 @@ public class Map {
 	}
 
 	public void setLayers() {
-		backPlan = new int[] {0, 1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-		firstPlan = new int[] {37, 38, 39};
+		backPlan = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+		firstPlan = new int[] {38, 39, 40};
 	}
 
 	public Map(String mapName) {
