@@ -10,6 +10,7 @@ public class MusicLoader {
 		manager = new AssetManager();
 		
 		manager.load("Audio/Music/MainTheme.ogg", Music.class);
+		manager.load("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
 		
 //		manager.load("Audio/Sound/Attack.wav", Sound.class);
 		
