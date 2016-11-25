@@ -19,13 +19,16 @@ import fr.zeldalike.screens.PlayScreen;
 
 public class Avatar extends Sprite {
 	// Position variables
-	public enum State { UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACK};
+	public enum State {
+		UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACKDOWN, ATTACKUP, ATTACKLEFT, ATTACKRIGHT
+	};
+
 	public State currentState;
 	public State previousState;
 	// Animation variables
 	private Animation walkRight, walkLeft, walkUp, walkDown;
 	private Animation standRight, standLeft, standUp, standDown;
-	private Animation attack;
+	private Animation attackleft, attackup, attackright, attackdown;
 	// Box2D variables
 	public World world;
 	public Body b2body;
@@ -38,55 +41,59 @@ public class Avatar extends Sprite {
 		this.world = world;
 
 		// Set our current and previous state initial animation
-		currentState = State.STANDDOWN;
-		previousState = State.STANDDOWN;
+		this.currentState = State.STANDDOWN;
+		this.previousState = State.STANDDOWN;
 
-		stateTimer = 0;
+		this.stateTimer = 0;
 
-		walkLeft = new Animation(0.1f, defineAnimation(0, 6, 20, 0, 20, 25)); // Define the "walk to the left" animation
-		walkRight = new Animation(0.1f, defineAnimation(7, 13, 20, 0, 20, 25)); // Define the "walk to the right" animation
-		walkDown = new Animation(0.1f, defineAnimation(14, 20, 20, 0, 20, 25)); // Define the "walk down" animation
-		walkUp = new Animation(0.1f, defineAnimation(21, 27, 20, 0, 20, 25)); // Define the "walk up" animation
-		
-		standLeft = new Animation(0, new TextureRegion(getTexture(), 60, 0, 20, 25)); // Define the "look left" animation
-		standRight = new Animation(0, new TextureRegion(getTexture(), 200, 0, 20, 25)); // Define the "look right" animation
-		standDown = new Animation(0, new TextureRegion(getTexture(), 340, 0, 20, 25)); // Define the "look down" animation
-		standUp = new Animation(0, new TextureRegion(getTexture(), 480, 0, 20, 25)); // Define the "look up" animation
+		this.walkLeft = new Animation(0.1f, this.defineAnimation(0, 6, 50, 20, 60, 70));
+		this.walkRight = new Animation(0.1f, this.defineAnimation(7, 13, 50, 20, 60, 70));
+		this.walkDown = new Animation(0.1f, this.defineAnimation(14, 20, 50, 20, 60, 70));
+		this.walkUp = new Animation(0.1f, this.defineAnimation(21, 27, 50, 20, 60, 70));
 
-		attack = new Animation(0.1f, defineAnimation(12, 18, 20, 0, 20, 25)); // Define the "attack" animation
+		this.standLeft = new Animation(0, new TextureRegion(this.getTexture(), 200, 20, 60, 70));
+		this.standRight = new Animation(0, new TextureRegion(this.getTexture(), 500, 20, 60, 70));
+		this.standDown = new Animation(0, new TextureRegion(this.getTexture(), 850, 20, 60, 70));
+		this.standUp = new Animation(0, new TextureRegion(this.getTexture(), 1250, 20, 60, 70));
+
+		this.attackleft = new Animation(0.1f, this.defineAnimation(28, 35, 50, 20, 60, 70));
+		this.attackright = new Animation(0.1f, this.defineAnimation(36, 43, 50, 20, 60, 70));
+		this.attackup = new Animation(0.1f, this.defineAnimation(44, 50, 50, 20, 60, 70));
+		this.attackdown = new Animation(0.1f, this.defineAnimation(51, 56, 50, 20, 60, 70));
 
 		// Initial texture
-		avatarStand = new TextureRegion(getTexture(), 0, 0, 20, 25);
+		this.avatarStand = new TextureRegion(this.getTexture(), 0, 0, 20, 25);
 
 		// Define our avatar and set his sprite bounds
-		defineAvatar();
-		setBounds(0, 0, 18/Constants.PPM, 23/Constants.PPM);
-		setRegion(avatarStand);
+		this.defineAvatar();
+		this.setBounds(0, 0, 60 / Constants.PPM, 70 / Constants.PPM);
+		this.setRegion(this.avatarStand);
 	}
-	
+
 	public void handleInput(float dt) {
-		// Control our player with immediate impulses when a key is pressed and stop when nothing is pressed
-		if (Gdx.input.isKeyPressed(Input.Keys.UP) && b2body.getLinearVelocity().y <= 0.5f) {
-			b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
+		// Control our player with immediate impulses when a key is pressed and
+		// stop when nothing is pressed
+		if (Gdx.input.isKeyPressed(Input.Keys.UP) && this.b2body.getLinearVelocity().y <= 0.5f) {
+			this.b2body.applyLinearImpulse(new Vector2(0, 1), this.b2body.getWorldCenter(), true);
 
-		} else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && b2body.getLinearVelocity().y >= -0.5f) {
-			b2body.applyLinearImpulse(new Vector2(0, -1), b2body.getWorldCenter(), true);
+		} else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && this.b2body.getLinearVelocity().y >= -0.5f) {
+			this.b2body.applyLinearImpulse(new Vector2(0, -1), this.b2body.getWorldCenter(), true);
 
-		} else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 0.5f) {
-			b2body.applyLinearImpulse(new Vector2(1, 0), b2body.getWorldCenter(), true);
+		} else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && this.b2body.getLinearVelocity().x <= 0.5f) {
+			this.b2body.applyLinearImpulse(new Vector2(1, 0), this.b2body.getWorldCenter(), true);
 
-		} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -0.5f) {
-			b2body.applyLinearImpulse(new Vector2(-1, 0), b2body.getWorldCenter(), true);
+		} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && this.b2body.getLinearVelocity().x >= -0.5f) {
+			this.b2body.applyLinearImpulse(new Vector2(-1, 0), this.b2body.getWorldCenter(), true);
 
 		} else {
-			b2body.setLinearVelocity(new Vector2(0, 0));
+			this.b2body.setLinearVelocity(new Vector2(0, 0));
 		}
-		
+
 	}
 
 	public void isMoving() {
 		// Change the constant on false if the player stop moving
-		if(b2body.getLinearVelocity().x==0 && b2body.getLinearVelocity().y==0) {
+		if (this.b2body.getLinearVelocity().x == 0 && this.b2body.getLinearVelocity().y == 0) {
 			Constants.isMoving = false;
 		} else {
 			Constants.isMoving = true;
@@ -94,121 +101,223 @@ public class Avatar extends Sprite {
 	}
 
 	public void update(float dt) {
-		setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-		setRegion(getFrame(dt));
+		this.setPosition(this.b2body.getPosition().x - this.getWidth() / 2,
+				this.b2body.getPosition().y - this.getHeight() / 2);
+		this.setRegion(this.getFrame(dt));
 	}
 
 	public TextureRegion getFrame(float dt) {
 		TextureRegion region;
 
 		// Set our current position
-		currentState = getState();
+		this.currentState = this.getState();
 
-		switch(currentState) {
+		switch (this.currentState) {
 		case UP:
-			region = walkUp.getKeyFrame(stateTimer, true );
+			region = this.walkUp.getKeyFrame(this.stateTimer, true);
 			break;
 		case RIGHT:
-			region = walkRight.getKeyFrame(stateTimer, true);
+			region = this.walkRight.getKeyFrame(this.stateTimer, true);
 			break;
 		case DOWN:
-			region = walkDown.getKeyFrame(stateTimer, true);
+			region = this.walkDown.getKeyFrame(this.stateTimer, true);
 			break;
 		case LEFT:
-			region = walkLeft.getKeyFrame(stateTimer, true);
+			region = this.walkLeft.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDUP:
-			region = standUp.getKeyFrame(stateTimer, true);
+			region = this.standUp.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDRIGHT:
-			region = standRight.getKeyFrame(stateTimer, true);
+			region = this.standRight.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDDOWN:
-			region = standDown.getKeyFrame(stateTimer, true);
+			region = this.standDown.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDLEFT:
-			region = standLeft.getKeyFrame(stateTimer, true);
+			region = this.standLeft.getKeyFrame(this.stateTimer, true);
 			break;
-		case ATTACK:
-			region = attack.getKeyFrame(stateTimer, true);
+		case ATTACKRIGHT:
+			region = this.attackright.getKeyFrame(this.stateTimer, true);
+			if (this.stateTimer >= 0.7) {
+				this.stateTimer = 0;
+				this.currentState = State.STANDRIGHT;
+			}
+			break;
+		case ATTACKUP:
+			region = this.attackup.getKeyFrame(this.stateTimer, true);
+
+			if (this.stateTimer >= 0.7) {
+				this.stateTimer = 0;
+				this.currentState = State.STANDUP;
+			}
+			break;
+		case ATTACKDOWN:
+			region = this.attackdown.getKeyFrame(this.stateTimer, true);
+			if (this.stateTimer >= 0.5) {
+				this.stateTimer = 0;
+				this.currentState = State.STANDDOWN;
+
+			}
+			break;
+		case ATTACKLEFT:
+			region = this.attackleft.getKeyFrame(this.stateTimer, true);
+			// animation complete d'attaque
+			if (this.stateTimer >= 0.7) {
+				this.stateTimer = 0;
+				this.currentState = State.STANDLEFT;
+			}
 			break;
 		default:
-			region = standDown.getKeyFrame(stateTimer, true);
+			region = this.standDown.getKeyFrame(this.stateTimer, true);
 			break;
 		}
 
-		stateTimer = currentState == previousState ? stateTimer + dt : 0;
-		previousState = currentState;
+		this.stateTimer = this.currentState == this.previousState ? this.stateTimer + dt : 0;
+		this.previousState = this.currentState;
 		return region;
 	}
 
 	private State getState() {
-		if(b2body.getLinearVelocity().y > 0) {
+		FixtureDef fdef = new FixtureDef();
+		EdgeShape head = new EdgeShape();
+		head.set(new Vector2(0 / Constants.PPM, 0 / Constants.PPM), new Vector2(0 / Constants.PPM, 0 / Constants.PPM));
+		this.b2body.getFixtureList();
+		fdef.shape = head;
+		fdef.isSensor = false;
+
+		if (this.b2body.getLinearVelocity().y > 0
+				&& (this.currentState != State.ATTACKUP || this.previousState != State.ATTACKUP)
+				&& (this.currentState != State.ATTACKRIGHT || this.previousState != State.ATTACKRIGHT)
+				&& (this.currentState != State.ATTACKLEFT || this.previousState != State.ATTACKLEFT)
+				&& (this.currentState != State.ATTACKDOWN || this.previousState != State.ATTACKDOWN)) {
 			return State.UP;
 		}
-		if(b2body.getLinearVelocity().y < 0) {
+		if (this.b2body.getLinearVelocity().y < 0
+				&& (this.currentState != State.ATTACKDOWN || this.previousState != State.ATTACKDOWN)
+				&& (this.currentState != State.ATTACKRIGHT || this.previousState != State.ATTACKRIGHT)
+				&& (this.currentState != State.ATTACKLEFT || this.previousState != State.ATTACKLEFT)
+				&& (this.currentState != State.ATTACKUP || this.previousState != State.ATTACKUP)) {
 			return State.DOWN;
 		}
-		if(b2body.getLinearVelocity().x > 0) {
+		if (this.b2body.getLinearVelocity().x > 0
+				&& (this.currentState != State.ATTACKRIGHT || this.previousState != State.ATTACKRIGHT)
+				&& (this.currentState != State.ATTACKLEFT || this.previousState != State.ATTACKLEFT)
+				&& (this.currentState != State.ATTACKUP || this.previousState != State.ATTACKUP)
+				&& (this.currentState != State.ATTACKDOWN || this.previousState != State.ATTACKDOWN)) {
 			return State.RIGHT;
 		}
-		if(b2body.getLinearVelocity().x < 0) {
+		if (this.b2body.getLinearVelocity().x < 0
+				&& (this.currentState != State.ATTACKLEFT || this.previousState != State.ATTACKLEFT)
+				&& (this.currentState != State.ATTACKUP || this.previousState != State.ATTACKUP)
+				&& (this.currentState != State.ATTACKDOWN || this.previousState != State.ATTACKDOWN)
+				&& (this.currentState != State.ATTACKRIGHT || this.previousState != State.ATTACKRIGHT)) {
 			return State.LEFT;
 		}
 
-		if(!Constants.isMoving && previousState==State.UP) {
+		if (!Constants.isMoving && this.previousState == State.UP) {
 			return State.STANDUP;
 		}
-		if(!Constants.isMoving && previousState==State.DOWN) {
+		if (!Constants.isMoving && this.previousState == State.DOWN) {
 			return State.STANDDOWN;
 		}
-		if(!Constants.isMoving && previousState==State.RIGHT) {
+		if (!Constants.isMoving && this.previousState == State.RIGHT) {
 			return State.STANDRIGHT;
 		}
-		if(!Constants.isMoving && previousState==State.LEFT) {
+		if (!Constants.isMoving && this.previousState == State.LEFT) {
 			return State.STANDLEFT;
 		}
 
-		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			return State.ATTACK;
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
+				&& (this.currentState == State.LEFT || this.currentState == State.STANDLEFT)) {
+			return State.ATTACKLEFT;
 		}
-	
-		return currentState;
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
+				&& (this.currentState == State.RIGHT || this.currentState == State.STANDRIGHT)) {
+			return State.ATTACKRIGHT;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
+				&& (this.currentState == State.UP || this.currentState == State.STANDUP)) {
+			return State.ATTACKUP;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
+				&& (this.currentState == State.DOWN || this.currentState == State.STANDDOWN)) {
+			return State.ATTACKDOWN;
+		}
+
+		// Creation collision epee
+		if ((this.currentState == State.ATTACKLEFT)) {
+			head.set(new Vector2(-20 / Constants.PPM, 10 / Constants.PPM),
+					new Vector2(-20 / Constants.PPM, -10 / Constants.PPM));
+			fdef.isSensor = true;
+			// this.b2body.createFixture(head, this.stateTimer);
+			this.b2body.createFixture(fdef).setUserData("head");
+
+		}
+
+		if ((this.currentState == State.ATTACKRIGHT && this.stateTimer <= 0.7)) {
+			head.set(new Vector2(16 / Constants.PPM, -10 / Constants.PPM),
+					new Vector2(16 / Constants.PPM, 10 / Constants.PPM));
+			fdef.isSensor = true;
+			// this.b2body.createFixture(head, this.stateTimer);
+			this.b2body.createFixture(fdef).setUserData("head");
+			this.b2body.getFixtureList();
+		}
+
+		if ((this.currentState == State.ATTACKUP && this.stateTimer <= 0.7)) {
+			head.set(new Vector2(10 / Constants.PPM, 20 / Constants.PPM),
+					new Vector2(-10 / Constants.PPM, 20 / Constants.PPM));
+			fdef.isSensor = true;
+			// this.b2body.createFixture(head, this.stateTimer);
+			this.b2body.createFixture(fdef).setUserData("head");
+			this.b2body.getFixtureList();
+		}
+
+		if ((this.currentState == State.ATTACKDOWN && this.stateTimer <= 0.7)) {
+			head.set(new Vector2(-10 / Constants.PPM, -20 / Constants.PPM),
+					new Vector2(10 / Constants.PPM, -20 / Constants.PPM));
+			fdef.isSensor = true;
+			// this.b2body.createFixture(head, this.stateTimer);
+			this.b2body.createFixture(fdef).setUserData("head");
+			this.b2body.getFixtureList();
+		}
+
+		return this.currentState;
 	}
 
 	private void defineAvatar() {
 		BodyDef bdef = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
-		
+
 		// Set the player's initial position and the type of body used
-		bdef.position.set(375/Constants.PPM, 610/Constants.PPM);
+		bdef.position.set(375 / Constants.PPM, 610 / Constants.PPM);
 		bdef.type = BodyDef.BodyType.DynamicBody;
-		
-		b2body = world.createBody(bdef);
+
+		this.b2body = this.world.createBody(bdef);
 
 		// Set the body form, a circle with a radius of 7
-		shape.setRadius(7f/Constants.PPM);
-		
+		shape.setRadius(7f / Constants.PPM);
+
 		fdef.filter.categoryBits = Constants.LINK_BIT;
 		fdef.filter.maskBits = Constants.DEFAULT_BIT | Constants.NPC_BIT | Constants.RUBY_BIT | Constants.PLANT_BIT;
 
 		fdef.shape = shape;
-		b2body.createFixture(fdef);
-		
+		this.b2body.createFixture(fdef);
+
 		EdgeShape head = new EdgeShape();
-		head.set(new Vector2(-2/Constants.PPM, 7/Constants.PPM), new Vector2(2/Constants.PPM, 7/Constants.PPM));
+		head.set(new Vector2(-2 / Constants.PPM, 7 / Constants.PPM), new Vector2(2 / Constants.PPM, 7 / Constants.PPM));
 		fdef.shape = head;
 		fdef.isSensor = true;
-		
-		b2body.createFixture(fdef).setUserData("head");
+
+		this.b2body.createFixture(fdef).setUserData("head");
 	}
 
 	public Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 
-		for(int i = init; i < limit; i++) {
-			frames.add(new TextureRegion(getTexture(), i * posX, posY, width, height));
+		for (int i = init; i < limit; i++) {
+			frames.add(new TextureRegion(this.getTexture(), i * posX, posY, width, height));
 		}
 
 		return frames;

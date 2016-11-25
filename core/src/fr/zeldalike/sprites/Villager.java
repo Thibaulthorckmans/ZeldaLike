@@ -1,5 +1,6 @@
 package fr.zeldalike.sprites;
 
+//blabla
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -13,7 +14,10 @@ import fr.zeldalike.screens.PlayScreen;
 
 public class Villager extends NonPlayableCharacter {
 	// Position variables
-	public enum State { UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACK};
+	public enum State {
+		UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACK
+	};
+
 	public State currentState;
 	public State previousState;
 	// Animation variables
@@ -25,118 +29,119 @@ public class Villager extends NonPlayableCharacter {
 
 	public Villager(PlayScreen screen, float x, float y) {
 		super(screen, x, y);
-		
-		// Set our current and previous state initial animation
-		currentState = State.STANDDOWN;
-		previousState = State.STANDDOWN;
-		
-		walkLeft = new Animation(0.2f, defineAnimation(0, 6, 20, 0, 20, 25));
-		walkRight = new Animation(0.2f, defineAnimation(7, 13, 20, 0, 20, 25));
-		walkDown = new Animation(0.2f, defineAnimation(14, 20, 20, 0, 20, 25));
-		walkUp = new Animation(0.2f, defineAnimation(21, 27, 20, 0, 20, 25));
 
-		standLeft = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 60, 0, 20, 25));
-		standRight = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 200, 0, 20, 25));
-		standDown = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 340, 0, 20, 25));
-		standUp = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 480, 0, 20, 25));
-		
-		stateTimer = 0;
-		setBounds(0, 0, 18/Constants.PPM, 23/Constants.PPM);
+		// Set our current and previous state initial animation
+		this.currentState = State.STANDDOWN;
+		this.previousState = State.STANDDOWN;
+
+		this.walkLeft = new Animation(0.2f, this.defineAnimation(0, 6, 50, 20, 60, 70));
+		this.walkRight = new Animation(0.2f, this.defineAnimation(7, 13, 50, 20, 60, 70));
+		this.walkDown = new Animation(0.2f, this.defineAnimation(14, 20, 50, 20, 60, 70));
+		this.walkUp = new Animation(0.2f, this.defineAnimation(21, 27, 50, 20, 60, 70));
+
+		this.standLeft = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 200, 20, 60, 70));
+		this.standRight = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 500, 20, 60, 70));
+		this.standDown = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 850, 20, 60, 70));
+		this.standUp = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 1250, 20, 60, 70));
+
+		this.stateTimer = 0;
+		this.setBounds(0, 0, 60 / Constants.PPM, 70 / Constants.PPM);
 	}
-	
+
 	@Override
 	public void isMoving() {
 		// Change the constant on false if the player stop moving
-		if(b2body.getLinearVelocity().x==0 && b2body.getLinearVelocity().y==0) {
-			isMoving = false;
+		if (this.b2body.getLinearVelocity().x == 0 && this.b2body.getLinearVelocity().y == 0) {
+			this.isMoving = false;
 		} else {
-			isMoving = true;
+			this.isMoving = true;
 		}
 	}
-	
+
 	@Override
 	public void update(float dt) {
-		setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-		setRegion(getFrame(dt));
+		this.setPosition(this.b2body.getPosition().x - this.getWidth() / 2,
+				this.b2body.getPosition().y - this.getHeight() / 2);
+		this.setRegion(this.getFrame(dt));
 	}
-	
+
 	@Override
 	public TextureRegion getFrame(float dt) {
 		TextureRegion region;
 
 		// Set our current position
-		currentState = getState();
+		this.currentState = this.getState();
 
-		switch(currentState) {
+		switch (this.currentState) {
 		case UP:
-			region = walkUp.getKeyFrame(stateTimer, true );
+			region = this.walkUp.getKeyFrame(this.stateTimer, true);
 			break;
 		case RIGHT:
-			region = walkRight.getKeyFrame(stateTimer, true);
+			region = this.walkRight.getKeyFrame(this.stateTimer, true);
 			break;
 		case DOWN:
-			region = walkDown.getKeyFrame(stateTimer, true);
+			region = this.walkDown.getKeyFrame(this.stateTimer, true);
 			break;
 		case LEFT:
-			region = walkLeft.getKeyFrame(stateTimer, true);
+			region = this.walkLeft.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDUP:
-			region = standUp.getKeyFrame(stateTimer, true);
+			region = this.standUp.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDRIGHT:
-			region = standRight.getKeyFrame(stateTimer, true);
+			region = this.standRight.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDDOWN:
-			region = standDown.getKeyFrame(stateTimer, true);
+			region = this.standDown.getKeyFrame(this.stateTimer, true);
 			break;
 		case STANDLEFT:
-			region = standLeft.getKeyFrame(stateTimer, true);
+			region = this.standLeft.getKeyFrame(this.stateTimer, true);
 			break;
 		default:
-			region = standDown.getKeyFrame(stateTimer, true);
+			region = this.standDown.getKeyFrame(this.stateTimer, true);
 			break;
 		}
 
-		stateTimer = currentState == previousState ? stateTimer + dt : 0;
-		previousState = currentState;
+		this.stateTimer = this.currentState == this.previousState ? this.stateTimer + dt : 0;
+		this.previousState = this.currentState;
 		return region;
 	}
-	
+
 	@Override
 	public State getState() {
-		if(b2body.getLinearVelocity().y > 0) {
+		if (this.b2body.getLinearVelocity().y > 0) {
 			return State.UP;
 		}
-		if(b2body.getLinearVelocity().y < 0) {
+		if (this.b2body.getLinearVelocity().y < 0) {
 			return State.DOWN;
 		}
-		if(b2body.getLinearVelocity().x > 0) {
+		if (this.b2body.getLinearVelocity().x > 0) {
 			return State.RIGHT;
 		}
-		if(b2body.getLinearVelocity().x < 0) {
+		if (this.b2body.getLinearVelocity().x < 0) {
 			return State.LEFT;
 		}
 
-		if(isMoving && previousState==State.UP) {
+		if (this.isMoving && this.previousState == State.UP) {
 			return State.STANDUP;
 		}
-		if(isMoving && previousState==State.DOWN) {
+		if (this.isMoving && this.previousState == State.DOWN) {
 			return State.STANDDOWN;
 		}
-		if(isMoving && previousState==State.RIGHT) {
+		if (this.isMoving && this.previousState == State.RIGHT) {
 			return State.STANDRIGHT;
 		}
-		if(isMoving && previousState==State.LEFT) {
+		if (this.isMoving && this.previousState == State.LEFT) {
 			return State.STANDLEFT;
 		}
-	
-		return currentState;
+
+		return this.currentState;
 	}
-	
+
 	@Override
 	public void movePath() {
-		if (b2body.getLinearVelocity().x <= 0.1f) {
-			b2body.applyLinearImpulse(new Vector2(0.3f, 0), b2body.getWorldCenter(), true);
+		if (this.b2body.getLinearVelocity().x <= 0.1f) {
+			this.b2body.applyLinearImpulse(new Vector2(0.3f, 0), this.b2body.getWorldCenter(), true);
 		}
 	}
 
@@ -145,28 +150,28 @@ public class Villager extends NonPlayableCharacter {
 		BodyDef bdef = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
-		
+
 		// Set the player's initial position and the type of body used
-		bdef.position.set(375/Constants.PPM, 650/Constants.PPM);
+		bdef.position.set(375 / Constants.PPM, 650 / Constants.PPM);
 		bdef.type = BodyDef.BodyType.DynamicBody;
-		
-		b2body = world.createBody(bdef);
+
+		this.b2body = this.world.createBody(bdef);
 
 		// Set the body form, a circle with a radius of 7
-		shape.setRadius(7f/Constants.PPM);
-		
+		shape.setRadius(7f / Constants.PPM);
+
 		fdef.filter.categoryBits = Constants.NPC_BIT;
 		fdef.filter.maskBits = Constants.DEFAULT_BIT | Constants.LINK_BIT | Constants.PLANT_BIT | Constants.NPC_BIT;
 
 		fdef.shape = shape;
-		b2body.createFixture(fdef);
+		this.b2body.createFixture(fdef);
 	}
-	
+
 	public Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 
-		for(int i = init; i < limit; i++) {
-			frames.add(new TextureRegion(screen.getAtlas().findRegion("Link"), i * posX, posY, width, height));
+		for (int i = init; i < limit; i++) {
+			frames.add(new TextureRegion(this.screen.getAtlas().findRegion("Link"), i * posX, posY, width, height));
 		}
 
 		return frames;
