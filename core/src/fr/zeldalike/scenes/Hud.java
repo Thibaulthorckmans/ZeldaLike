@@ -21,8 +21,10 @@ public class Hud implements Disposable{
 	private Stage stage;
 	private Table healthBar, Buttons;
 
-	private int health = 6;
+	private int health = 6, maxHealth = 6;
 	private String action;
+	
+	private Label buttonA, buttonB;
 	
 	public Hud(SpriteBatch sb) {
 		this.viewport = new FitViewport(Constants.V_WIDTH * 3 , Constants.V_HEIGHT * 3, new OrthographicCamera());
@@ -46,8 +48,8 @@ public class Hud implements Disposable{
 		return this.health;
 	}
 	
-	public void setAction(String pAction) {
-		this.action = pAction;
+	public void setButtonA(String pText) {
+		this.buttonA.setText(pText);
 	}
 	
 	private void initHealthBar() {
@@ -55,10 +57,10 @@ public class Hud implements Disposable{
 		this.healthBar.defaults().padTop(5f).padLeft(5f);
 		this.healthBar.setFillParent(true);
 
-		this.health = this.health > Constants.MAX_HEALTH ? Constants.MAX_HEALTH : this.health;
-		int nbCell = (this.health / 2) + (this.health % 2);
+		this.maxHealth = this.maxHealth > Constants.MAX_HEALTH ? Constants.MAX_HEALTH : this.maxHealth;
+		this.health = this.health > this.maxHealth ? this.maxHealth : this.health;
 		
-		for(int i = 0; i < nbCell; i++) {
+		for(int i = 0; i < (this.maxHealth / 2); i++) {
 			Stack healthBarStack = new Stack();
 			
 			if(i == 10) {
@@ -69,10 +71,13 @@ public class Hud implements Disposable{
 			Image healthBarFG = new Image(new Texture("HUD/healthfg.png"));
 			
 			healthBarStack.add(healthBarBG);
-			healthBarStack.add(healthBarMG);
 			
-			if(((i == (nbCell - 1)) && ((this.health % 2) == 0)) || (i != (nbCell - 1))) {
-					healthBarStack.add(healthBarFG);
+			if(i < ((this.health / 2) + (this.health % 2))) {
+				healthBarStack.add(healthBarMG);
+			}
+			
+			if(i < (this.health / 2)) {
+				healthBarStack.add(healthBarFG);
 			}
 			
 			this.healthBar.add(healthBarStack);
@@ -81,16 +86,22 @@ public class Hud implements Disposable{
 	
 	private void initButton() {
 		this.Buttons.top().right();
+		this.Buttons.padTop(20f).padRight(30f);
+		this.Buttons.defaults().width(50f).height(50f);
 		this.Buttons.setFillParent(true);
 		
-		this.action = "Epée";
-		Label buttonB = new Label(this.action, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-		this.action = "Action";
-		Label buttonA = new Label(this.action, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		this.Buttons.setDebug(true);
 		
-		this.Buttons.add(buttonB).left();
+		this.action = "Epée";
+		this.buttonB = new Label(this.action, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		this.action = "Action";
+		this.buttonA = new Label(this.action, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		
+		this.Buttons.add(this.buttonB);
+		this.Buttons.add();
 		this.Buttons.row();
-		this.Buttons.add(buttonA).right();
+		//this.Buttons.add();
+		this.Buttons.add(this.buttonA).colspan(2).right();
 	}
 	
 	public void cure(int valSoin) {
