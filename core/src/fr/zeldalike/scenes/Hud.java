@@ -31,7 +31,7 @@ public class Hud implements Disposable {
 	// **************************************************
 	private Viewport viewport;
 	private Stage stage;
-	private Table healthBar, buttons; // Tableaux affichant les barres de vie et les boutons d'action et d'items
+	private Table healthBar, dialogBox, buttons; // Tableaux affichant les barres de vie, les dialogues et les boutons d'action et d'items
 	private TextureAtlas itemsAtlas; // Attributs contenant la texture des items
 
 	private int health = 6, maxHealth = 6; // Atributs de vie initialisé à 6
@@ -52,9 +52,12 @@ public class Hud implements Disposable {
 
 		this.initHealthBar();
 		this.initButton();
-
+		this.initDialogBox();
 	}
 
+	// **************************************************
+	// Getters
+	// **************************************************
 	public Stage getStage() {
 		return this.stage;
 	}
@@ -84,6 +87,13 @@ public class Hud implements Disposable {
 		return this.buttonY;
 	}
 
+	public boolean getDialogBoxVisibility() {
+		return this.dialogBox.isVisible();
+	}
+
+	// **************************************************
+	// Setters
+	// **************************************************
 	public void setButtonA(String pItems) {
 		this.buttonA.setText(pItems);
 	}
@@ -98,6 +108,14 @@ public class Hud implements Disposable {
 
 	public void setButtonY(String pItems) {
 		this.buttonY.setRegion(this.itemsAtlas.findRegion(pItems));
+	}
+
+	public void setDialogBoxVisibility() {
+		if(this.dialogBox.isVisible()) {
+			this.dialogBox.setVisible(false);
+		} else {
+			this.dialogBox.setVisible(true);
+		}
 	}
 
 	// **************************************************
@@ -148,6 +166,8 @@ public class Hud implements Disposable {
 		this.buttons.defaults().width(50f).height(50f).maxWidth(50f).maxHeight(50f).center();
 		this.buttons.setFillParent(true);
 
+		//this.buttons.setDebug(true);
+
 		this.buttonA = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		this.buttonA.setAlignment(Align.center);
 		this.buttonA.setFontScale(1.5f);
@@ -175,6 +195,44 @@ public class Hud implements Disposable {
 		this.buttons.add(stackBtnB).colspan(3);
 
 		this.stage.addActor(this.buttons);
+	}
+
+	private void initDialogBox() {
+		this.dialogBox = new Table();
+
+		this.dialogBox.bottom();
+		this.dialogBox.padBottom(15f);
+		this.dialogBox.defaults().width(900f).height(240f);
+		this.dialogBox.setFillParent(true);
+		this.dialogBox.setVisible(false);
+
+		//this.dialogBox.setDebug(true);
+
+		Stack stackDialog = new Stack();
+		Image dialogBG = new Image(new Texture("HUD/dialog_box.png"));
+
+		Table dialog = new Table();
+		dialog.top().padTop(20f);
+		dialog.defaults().width(860f).maxWidth(860f);
+		dialog.setFillParent(true);
+		//dialog.setDebug(true);
+
+		Label titre = new Label("Narrateur :", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		titre.setFontScale(2f);
+		Label message = new Label("Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		message.setFontScale(1.5f);
+		message.setWrap(true);
+
+		dialog.add(titre).top();
+		dialog.row();
+		dialog.add(message).top().padLeft(25f);
+
+		stackDialog.add(dialogBG);
+		stackDialog.add(dialog);
+
+		this.dialogBox.add(stackDialog);
+
+		this.stage.addActor(this.dialogBox);
 	}
 
 	// **************************************************

@@ -55,19 +55,19 @@ public class PlayScreen implements Screen {
 		// Create the avatar in our game world
 		this.atlas = new TextureAtlas("Sprites/Link.pack");
 		this.player = new Avatar(this.world, this);
-		
+
 		this.world.setContactListener(new WorldContactListener());
-		
+
 		// Launch our main theme music, set on looping and is volume
 		this.music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
 		this.music.setLooping(true);
 		this.music.setVolume(10/Constants.PPM);
 		this.music.play();
 
-		// 
+		//
 		this.villager = new Villager(this, 360, 610);
 		this.villager.movePath();
-		
+
 		// Define if the avatar is moving or not
 		Constants.isMoving = false;
 
@@ -85,10 +85,10 @@ public class PlayScreen implements Screen {
 	}
 
 	public void update(float dt) {
-		
+
 		// Handle user input first
 		this.player.handleInput(dt);
-		
+
 		// Takes 1 step in the physics simulation (60 times per second)
 		this.world.step(1/60f, 6, 2);
 
@@ -103,13 +103,16 @@ public class PlayScreen implements Screen {
 
 		// Tell our renderer to draw only what our camera can see in our game world
 		this.mainMap.setView(this.mainCam.getGameCam());
-		
-		
+
+
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
 			this.hud.damage(1);
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
 			this.hud.cure(1);
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+			this.hud.setDialogBoxVisibility();
 		}
 	}
 
@@ -152,7 +155,7 @@ public class PlayScreen implements Screen {
 		// Update our game viewport
 		this.mainCam.resize(width, height);
 	}
-	
+
 	public World getWorld() {
 		return this.world;
 	}
