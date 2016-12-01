@@ -104,11 +104,6 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 		this.update(delta);
 
-		if(Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-			//this.mainMap.getMap().dispose();
-			this.mainMap.setMap("donjonTest");
-		}
-
 		// Clear the game screen with black
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -204,9 +199,9 @@ public class PlayScreen implements Screen {
 		this.world.dispose();
 		this.hud.dispose();
 	}
-	
+
 	public boolean gameOver(){
-		if(this.player.currentState == Avatar.State.DEAD && player.getStateTimer()>3){
+		if((this.player.currentState == Avatar.State.DEAD) && (this.player.getStateTimer()>3)){
 			return true;
 		}
 		return false;

@@ -151,7 +151,7 @@ public class Avatar extends Sprite {
 			}
 			break;
 		case DEAD:
-			region = lunkDead;
+			region = this.lunkDead;
 			break;
 		default:
 			region = this.standDown.getKeyFrame(this.stateTimer, true);
@@ -234,7 +234,7 @@ public class Avatar extends Sprite {
 				&& ((this.currentState == State.DOWN) || (this.currentState == State.STANDDOWN))) {
 			return State.ATTACKDOWN;
 		}
-		if(lunkIsDead){
+		if(this.lunkIsDead){
 			return State.DEAD;
 		}
 
@@ -277,13 +277,13 @@ public class Avatar extends Sprite {
 
 		return this.currentState;
 	}
-	
+
 	public float getStateTimer() {
-		return stateTimer;
+		return this.stateTimer;
 	}
-	
+
 	public boolean isLunkIsDead() {
-		return lunkIsDead;
+		return this.lunkIsDead;
 	}
 
 	// **************************************************
@@ -296,11 +296,11 @@ public class Avatar extends Sprite {
 			this.isMoving = true;
 		}
 	}
-	
+
 	public void setStateTimer(float stateTimer) {
 		this.stateTimer = stateTimer;
 	}
-	
+
 	public void setLunkIsDead(boolean lunkIsDead) {
 		this.lunkIsDead = lunkIsDead;
 	}
@@ -387,8 +387,6 @@ public class Avatar extends Sprite {
 			if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
 				this.inventory.moveCursor(-1, 0);
 			}
-
-
 		} else {
 			// Control our player with immediate impulses when a key is pressed and
 			// stop when nothing is pressed
