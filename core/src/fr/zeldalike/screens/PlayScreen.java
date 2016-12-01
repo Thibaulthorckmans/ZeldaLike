@@ -186,4 +186,11 @@ public class PlayScreen implements Screen {
 		world.dispose();
 		hud.dispose();
 	}
+	
+	public boolean gameOver(){
+		if(this.player.currentState == Avatar.State.DEAD && player.getStateTimer()>3){
+			return true;
+		}
+		return false;
+	}
 }
