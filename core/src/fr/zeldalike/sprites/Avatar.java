@@ -26,9 +26,11 @@ public class Avatar extends Sprite {
 	// Fields
 	// **************************************************
 	private TextureRegion avatarStand;
+	private TextureRegion lunkDead;
 	private float stateTimer;
+	private boolean lunkIsDead;
 	// Position variables
-	public enum State {UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACKDOWN, ATTACKUP, ATTACKLEFT, ATTACKRIGHT};
+	public enum State {UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACKDOWN, ATTACKUP, ATTACKLEFT, ATTACKRIGHT, DEAD};
 	public State currentState;
 	public State previousState;
 	// Animation variables
@@ -148,6 +150,9 @@ public class Avatar extends Sprite {
 				this.currentState = State.STANDLEFT;
 			}
 			break;
+		case DEAD:
+			region = lunkDead;
+			break;
 		default:
 			region = this.standDown.getKeyFrame(this.stateTimer, true);
 			break;
@@ -229,6 +234,9 @@ public class Avatar extends Sprite {
 				&& ((this.currentState == State.DOWN) || (this.currentState == State.STANDDOWN))) {
 			return State.ATTACKDOWN;
 		}
+		if(lunkIsDead){
+			return State.DEAD;
+		}
 
 		// Creation collision epee
 		if ((this.currentState == State.ATTACKLEFT)) {
@@ -269,6 +277,14 @@ public class Avatar extends Sprite {
 
 		return this.currentState;
 	}
+	
+	public float getStateTimer() {
+		return stateTimer;
+	}
+	
+	public boolean isLunkIsDead() {
+		return lunkIsDead;
+	}
 
 	// **************************************************
 	// Setters
@@ -279,6 +295,14 @@ public class Avatar extends Sprite {
 		} else {
 			this.isMoving = true;
 		}
+	}
+	
+	public void setStateTimer(float stateTimer) {
+		this.stateTimer = stateTimer;
+	}
+	
+	public void setLunkIsDead(boolean lunkIsDead) {
+		this.lunkIsDead = lunkIsDead;
 	}
 
 	public void setInventory(Inventory pInventory) {

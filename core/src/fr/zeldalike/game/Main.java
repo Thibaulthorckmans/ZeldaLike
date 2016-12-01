@@ -7,6 +7,7 @@ import fr.zeldalike.screens.PlayScreen;
 import fr.zeldalike.tools.MusicLoader;
 
 public class Main extends Game {
+	public static final String TITLE = "ZeldaLike";
 	public SpriteBatch batch;
 	public MusicLoader music;
 	
