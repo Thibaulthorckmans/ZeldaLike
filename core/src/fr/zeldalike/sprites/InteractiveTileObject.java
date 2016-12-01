@@ -15,6 +15,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import fr.zeldalike.assets.Constants;
 
 public abstract class InteractiveTileObject {
+	// **************************************************
+	// Fields
+	// **************************************************
 	protected World world;
 	protected TiledMap map;
 	protected TiledMapTile tile;
@@ -22,6 +25,9 @@ public abstract class InteractiveTileObject {
 	protected Body body;
 	protected Fixture fixture;
 	
+	// **************************************************
+	// Constructors
+	// **************************************************
 	public InteractiveTileObject(World world, TiledMap map, Rectangle bounds) {
 		this.world = world;
 		this.map = map;
@@ -41,6 +47,9 @@ public abstract class InteractiveTileObject {
 		fixture = body.createFixture(fdef);
 	}
 	
+	// **************************************************
+	// Public Methods
+	// **************************************************
 	public abstract void onHeadHit();
 	
 	public void setCategoryFilter(short filterBit) {

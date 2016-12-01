@@ -20,10 +20,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.zeldalike.assets.Constants;
 
 /**
- * Hud est la classe permettant d'afficher la vie du joueur,
- * ainsi que les boites de dialogues et les boutons contenant les items ou l'action réalisable.
- *
- * @author Nicolas
+ * Hud is the class that allow us to display the player's life
+ * as well as the dialogues boxes and the buttons containing the items or the possible actions.
  */
 public class Hud implements Disposable {
 	// **************************************************
@@ -31,111 +29,106 @@ public class Hud implements Disposable {
 	// **************************************************
 	private Viewport viewport;
 	private Stage stage;
-	private Table healthBar, dialogBox, buttons; // Tableaux affichant les barres de vie, les dialogues et les boutons d'action et d'items
-	private TextureAtlas itemsAtlas; // Attributs contenant la texture des items
+	private Table healthBar, dialogBox, buttons; // Display health bar, dialogues and action/item's buttons 
+	private TextureAtlas itemsAtlas; // Contains the item's textures
 
-	private int health = 6, maxHealth = 6; // Atributs de vie initialisé à 6
+	private int health = 6, maxHealth = 6; // Health's attributes, initialize at 6
 
-	private Label buttonA; // Label représentant les actions du bouton 'A'
-	private TextureRegion buttonB, buttonX, buttonY; // Texture représentant les items définit sur les boutons 'B', 'X' et 'Y'
+	private Label buttonA; // Label that describe the actions for the 'A' button
+	private TextureRegion buttonB, buttonX, buttonY; // Label that describe the actions for the 'B', 'X' and 'Y' buttons
 
 	// **************************************************
 	// Constructors
-	// **************************************************
-	/**
-	 * Constructeur de la Classe HUD
-	 * */
+	// *************************************************
 	public Hud(SpriteBatch sb) {
-		this.viewport = new FitViewport(Constants.V_WIDTH * 3, Constants.V_HEIGHT * 3, new OrthographicCamera());
-		this.stage = new Stage(this.viewport, sb);
-		this.itemsAtlas = new TextureAtlas("Sprites/items.pack");
+		viewport = new FitViewport(Constants.V_WIDTH * 3, Constants.V_HEIGHT * 3, new OrthographicCamera());
+		stage = new Stage(viewport, sb);
+		itemsAtlas = new TextureAtlas("Sprites/items.pack");
 
-		this.initHealthBar();
-		this.initButton();
-		this.initDialogBox();
+		initHealthBar();
+		initButton();
+		initDialogBox();
 	}
 
 	// **************************************************
 	// Getters
 	// **************************************************
 	public Stage getStage() {
-		return this.stage;
+		return stage;
 	}
 
-	/**
-	 * Returns current health's value.
-	 *
-	 * @return Current health's value.
-	 */
 	public int getHealth() {
-		return this.health;
+		return health;
 	}
 
 	public String getButtonA() {
-		return this.buttonA.getText().toString();
+		return buttonA.getText().toString();
 	}
 
 	public TextureRegion getButtonB() {
-		return this.buttonB;
+		return buttonB;
 	}
 
 	public TextureRegion getButtonX() {
-		return this.buttonX;
+		return buttonX;
 	}
 
 	public TextureRegion getButtonY() {
-		return this.buttonY;
+		return buttonY;
 	}
 
 	public boolean getDialogBoxVisibility() {
-		return this.dialogBox.isVisible();
+		return dialogBox.isVisible();
 	}
 
 	// **************************************************
 	// Setters
 	// **************************************************
 	public void setButtonA(String pItems) {
-		this.buttonA.setText(pItems);
+		buttonA.setText(pItems);
 	}
 
 	public void setButtonB(String pItems) {
-		this.buttonB.setRegion(this.itemsAtlas.findRegion(pItems));
+		buttonB.setRegion(itemsAtlas.findRegion(pItems));
 	}
 
 	public void setButtonX(String pItems) {
-		this.buttonX.setRegion(this.itemsAtlas.findRegion(pItems));
+		buttonX.setRegion(itemsAtlas.findRegion(pItems));
 	}
 
 	public void setButtonY(String pItems) {
-		this.buttonY.setRegion(this.itemsAtlas.findRegion(pItems));
+		buttonY.setRegion(itemsAtlas.findRegion(pItems));
 	}
 
 	public void setDialogBoxVisibility() {
-		if(this.dialogBox.isVisible()) {
-			this.dialogBox.setVisible(false);
+		if(dialogBox.isVisible()) {
+			dialogBox.setVisible(false);
 		} else {
-			this.dialogBox.setVisible(true);
+			dialogBox.setVisible(true);
 		}
 	}
 
 	// **************************************************
 	// Private methods
 	// **************************************************
+	/** 
+	 * Initialize the health bar.
+	 */
 	private void initHealthBar() {
-		this.healthBar = new Table();
+		healthBar = new Table();
 
-		this.healthBar.top().left();
-		this.healthBar.defaults().padTop(5f).padLeft(5f);
-		this.healthBar.setFillParent(true);
+		healthBar.top().left();
+		healthBar.defaults().padTop(5f).padLeft(5f);
+		healthBar.setFillParent(true);
 
-		this.maxHealth = this.maxHealth > Constants.MAX_HEALTH ? Constants.MAX_HEALTH : this.maxHealth;
-		this.health = this.health > this.maxHealth ? this.maxHealth : this.health;
+		maxHealth = maxHealth > Constants.MAX_HEALTH ? Constants.MAX_HEALTH : maxHealth;
+		health = health > maxHealth ? maxHealth : health;
 
-		for (int i = 0; i < (this.maxHealth / 2); i++) {
+		for (int i = 0; i < (maxHealth / 2); i++) {
 			Stack healthBarStack = new Stack();
 
 			if ((i % 10) == 0) {
-				this.healthBar.row();
+				healthBar.row();
 			}
 			Image healthBarBG = new Image(new Texture("HUD/healthbg.png"));
 			Image healthBarMG = new Image(new Texture("HUD/healthmg.png"));
@@ -143,68 +136,74 @@ public class Hud implements Disposable {
 
 			healthBarStack.add(healthBarBG);
 
-			if (i < ((this.health / 2) + (this.health % 2))) {
+			if (i < ((health / 2) + (health % 2))) {
 				healthBarStack.add(healthBarMG);
 			}
 
-			if (i < (this.health / 2)) {
+			if (i < (health / 2)) {
 				healthBarStack.add(healthBarFG);
 			}
 
-			this.healthBar.add(healthBarStack);
+			healthBar.add(healthBarStack);
 		}
 
-		this.stage.addActor(this.healthBar);
+		stage.addActor(healthBar);
 	}
 
+	/** 
+	 * Initialize the buttons.
+	 */
 	private void initButton() {
 		TextureAtlas btnAtlas = new TextureAtlas("HUD/buttons.pack");
-		this.buttons = new Table();
+		buttons = new Table();
 
-		this.buttons.top().right();
-		this.buttons.padTop(20f).padRight(30f);
-		this.buttons.defaults().width(50f).height(50f).maxWidth(50f).maxHeight(50f).center();
-		this.buttons.setFillParent(true);
+		buttons.top().right();
+		buttons.padTop(20f).padRight(30f);
+		buttons.defaults().width(50f).height(50f).maxWidth(50f).maxHeight(50f).center();
+		buttons.setFillParent(true);
 
 		//this.buttons.setDebug(true);
 
-		this.buttonA = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-		this.buttonA.setAlignment(Align.center);
-		this.buttonA.setFontScale(1.5f);
+		buttonA = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		buttonA.setAlignment(Align.center);
+		buttonA.setFontScale(1.5f);
 
-		this.buttonB = new TextureRegion(this.itemsAtlas.findRegion("Sword"));
-		Image imgButtonB = new Image(this.buttonB);
+		buttonB = new TextureRegion(itemsAtlas.findRegion("Sword"));
+		Image imgButtonB = new Image(buttonB);
 
-		this.buttonX = new TextureRegion(this.itemsAtlas.findRegion("NullItem"));
-		Image imgButtonX = new Image(this.buttonX);
+		buttonX = new TextureRegion(itemsAtlas.findRegion("NullItem"));
+		Image imgButtonX = new Image(buttonX);
 
-		this.buttonY = new TextureRegion(this.itemsAtlas.findRegion("NullItem"));
-		Image imgButtonY = new Image(this.buttonY);
+		buttonY = new TextureRegion(itemsAtlas.findRegion("NullItem"));
+		Image imgButtonY = new Image(buttonY);
 
-		Stack stackBtnA = new Stack(new Image(btnAtlas.findRegion("buttonA")), this.buttonA);
+		Stack stackBtnA = new Stack(new Image(btnAtlas.findRegion("buttonA")), buttonA);
 		Stack stackBtnB = new Stack(new Image(btnAtlas.findRegion("buttonB")), imgButtonB);
 		Stack stackBtnX = new Stack(new Image(btnAtlas.findRegion("buttonX")), imgButtonX);
 		Stack stackBtnY = new Stack(new Image(btnAtlas.findRegion("buttonY")), imgButtonY);
 
-		this.buttons.add(stackBtnX).colspan(3);
-		this.buttons.row();
-		this.buttons.add(stackBtnY);
-		this.buttons.add();
-		this.buttons.add(stackBtnA);
-		this.buttons.row();
-		this.buttons.add(stackBtnB).colspan(3);
+		buttons.add(stackBtnX).colspan(3);
+		buttons.row();
+		buttons.add(stackBtnY);
+		buttons.add();
+		buttons.add(stackBtnA);
+		buttons.row();
+		buttons.add(stackBtnB).colspan(3);
 
-		this.stage.addActor(this.buttons);
+		stage.addActor(buttons);
 	}
 
+	/** 
+	 * Initialize the dialogue box.
+	 */
 	private void initDialogBox() {
-		this.dialogBox = new Table();
+		dialogBox = new Table();
 
-		this.dialogBox.bottom();
-		this.dialogBox.padBottom(15f);
-		this.dialogBox.defaults().width(900f).height(240f);
-		this.dialogBox.setFillParent(true);
-		this.dialogBox.setVisible(false);
+		dialogBox.bottom();
+		dialogBox.padBottom(15f);
+		dialogBox.defaults().width(900f).height(240f);
+		dialogBox.setFillParent(true);
+		dialogBox.setVisible(false);
 
 		//this.dialogBox.setDebug(true);
 
@@ -230,21 +229,26 @@ public class Hud implements Disposable {
 		stackDialog.add(dialogBG);
 		stackDialog.add(dialog);
 
-		this.dialogBox.add(stackDialog);
+		dialogBox.add(stackDialog);
 
-		this.stage.addActor(this.dialogBox);
+		stage.addActor(dialogBox);
 	}
 
 	// **************************************************
 	// Public methods
 	// **************************************************
+	/** 
+	 * Restore the player's health.
+	 * 
+	 * @param valSoin The amount of life restored.
+	 */
 	public void cure(int valSoin) {
-		int sizeHealthBar = this.healthBar.getCells().size;
+		int sizeHealthBar = healthBar.getCells().size;
 		int sizeTab = 0;
 		Stack stack;
 
 		for (int i = 0; i < sizeHealthBar; i++) {
-			stack = (Stack) this.healthBar.getCells().get(i).getActor();
+			stack = (Stack) healthBar.getCells().get(i).getActor();
 			sizeTab = stack.getChildren().size;
 
 			if (sizeTab < 3) {
@@ -255,50 +259,55 @@ public class Hud implements Disposable {
 					stack.add(healthBarMG);
 					stack.add(healthBarFG);
 					valSoin -= 2;
-					this.health += 2;
+					health += 2;
 				} else if ((valSoin >= 2) && (sizeTab == 2)) {
 					stack.add(healthBarFG);
 					valSoin -= 1;
-					this.health += 1;
+					health += 1;
 				} else if ((valSoin == 1) && (sizeTab == 1)) {
 					stack.add(healthBarMG);
 					valSoin -= 1;
-					this.health += 1;
+					health += 1;
 				} else if ((valSoin == 1) && (sizeTab == 2)) {
 					stack.add(healthBarFG);
 					valSoin -= 1;
-					this.health += 1;
+					health += 1;
 				}
 			}
 
-			if ((valSoin == 0) || (this.health == (sizeTab * 2))) {
+			if ((valSoin == 0) || (health == (sizeTab * 2))) {
 				break;
 			}
 		}
 	}
-
+	
+	/** 
+	 * Decrease the player's health.
+	 * 
+	 * @param valDegat The amount of life lost.
+	 */
 	public void damage(int valDegat) {
-		int sizeHealthBar = this.healthBar.getCells().size;
+		int sizeHealthBar = healthBar.getCells().size;
 		int sizeTab = 0;
 		Stack stack;
 
 		for (int i = sizeHealthBar - 1; i >= 0; i--) {
-			stack = (Stack) this.healthBar.getCells().get(i).getActor();
+			stack = (Stack) healthBar.getCells().get(i).getActor();
 			sizeTab = stack.getChildren().size;
 
 			if (sizeTab > 1) {
 				for (int j = sizeTab - 1; j > 0; j--) {
 					stack.getChildren().get(j).remove();
 					valDegat = valDegat - 1;
-					this.health -= 1;
+					health -= 1;
 
-					if ((valDegat == 0) || (this.health == 0)) {
+					if ((valDegat == 0) || (health == 0)) {
 						break;
 					}
 				}
 			}
 
-			if ((valDegat == 0) || (this.health == 0)) {
+			if ((valDegat == 0) || (health == 0)) {
 				break;
 			}
 		}

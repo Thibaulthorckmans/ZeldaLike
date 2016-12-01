@@ -10,54 +10,67 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 import fr.zeldalike.assets.Constants;
 
+/**
+ * Set the map.
+ */
 public class Map {
-	// Tiled map variables
+	// **************************************************
+	// Fields
+	// **************************************************
 	private TmxMapLoader mapLoader;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
-	// Layers variables
-	int[] backPlan, firstPlan;
+	int[] backPlan, firstPlan; // Layers variables
 
+	// **************************************************
+	// Constructors
+	// **************************************************
 	public Map(String mapName) {
 		// Load our map and setup the renderer
-		this.mapLoader = new TmxMapLoader();
-		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
-		this.renderer = new OrthogonalTiledMapRenderer(this.map, 1/Constants.PPM);
+		mapLoader = new TmxMapLoader();
+		map = mapLoader.load("Maps/" + mapName + ".tmx");
+		renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
 	}
 	
+	// **************************************************
+	// Getters
+	// **************************************************
 	public TiledMap getMap() {
-		return this.map;
+		return map;
 	}
 	
 	public int[] getBackPlan() {
-		return this.backPlan;
+		return backPlan;
 	}
 
 	public int[] getFirstPlan() {
-		return this.firstPlan;
+		return firstPlan;
 	}
-
+	
+	// **************************************************
+	// Setters
+	// **************************************************
 	public void setMap(String mapName) {
-		this.mapLoader = new TmxMapLoader();
-		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
-		this.renderer.setMap(this.map);
-		this.setLayers();
+		mapLoader = new TmxMapLoader();
+		map = mapLoader.load("Maps/" + mapName + ".tmx");
+		renderer.setMap(map);
+		setLayers();
 	}
 	public void setRenderer() {
-		this.renderer.setMap(this.map);
+		renderer.setMap(map);
 	}
 
 	public void setLayers() {
-		this.setBackPlan();
-		this.setFirstPlan();
+		setBackPlan();
+		setFirstPlan();
 	}
 	
 	public void setBackPlan() {
-		int nbLayer = this.map.getLayers().getCount();
+		int nbLayer = map.getLayers().getCount();
 		List<Integer> layers = new ArrayList<Integer>();
 
 		for(int i = 0; i < nbLayer; i++) {
-			String nameLayer = this.map.getLayers().get(i).getName();
+			String nameLayer = map.getLayers().get(i).getName();
 			
 			if(nameLayer.contains("col_") || nameLayer.contains("fp_")) {
 				break;
@@ -72,15 +85,15 @@ public class Map {
 			tab[i] = layers.get(i);
 		}
 		
-		this.backPlan = tab;
+		backPlan = tab;
 	}
 	
 	public void setFirstPlan() {
-		int nbLayer = this.map.getLayers().getCount();
+		int nbLayer = map.getLayers().getCount();
 		List<Integer> layers = new ArrayList<Integer>();
 
 		for(int i = 0; i < nbLayer; i++) {
-			String nameLayer = this.map.getLayers().get(i).getName();
+			String nameLayer = map.getLayers().get(i).getName();
 			
 			if(nameLayer.contains("fp_")) {
 				layers.add(i);
@@ -93,19 +106,22 @@ public class Map {
 			tab[i] =  layers.get(i);
 		}
 		
-		this.firstPlan=  tab;
+		firstPlan=  tab;
 	}
 
 	public void setView(OrthographicCamera cam) {
-		this.renderer.setView(cam);
+		renderer.setView(cam);
 	}
-
+	
+	// **************************************************
+	// Public Methods
+	// **************************************************
 	public void dispose() {
-		this.map.dispose();
-		this.renderer.dispose();
+		map.dispose();
+		renderer.dispose();
 	}
 
 	public void renderLayers(int[] layer) {
-		this.renderer.render(layer);
+		renderer.render(layer);
 	}
 }

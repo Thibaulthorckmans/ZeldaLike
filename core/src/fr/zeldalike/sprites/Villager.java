@@ -1,6 +1,5 @@
 package fr.zeldalike.sprites;
 
-//blabla
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -13,167 +12,262 @@ import fr.zeldalike.assets.Constants;
 import fr.zeldalike.screens.PlayScreen;
 
 public class Villager extends NonPlayableCharacter {
+	// **************************************************
+	// Fields
+	// **************************************************
+	private float stateTimer;
 	// Position variables
-	public enum State {
-		UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACK
-	};
-
+	public enum State {UP, DOWN, LEFT, RIGHT, STANDUP, STANDDOWN, STANDLEFT, STANDRIGHT, ATTACK};
 	public State currentState;
 	public State previousState;
 	// Animation variables
 	private Animation walkRight, walkLeft, walkUp, walkDown;
 	private Animation standRight, standLeft, standUp, standDown;
-	// Other variables
-	private float stateTimer;
-	private boolean isMoving;
-
+	// Movement variables
+	private boolean isMoving = false;
+	// Deplacement variables
+	private float timer;
+	private boolean verticalAxe = false;
+	private boolean stopMovingXPos = true;
+	private boolean stopMovingYPos = true;
+	private boolean stopMovingXNeg = true;
+	private boolean stopMovingYNeg = true;
+	
+	// **************************************************
+	// Constructors
+	// **************************************************
+	/**
+	 * Initialize the villager's state and animations.
+	 */
 	public Villager(PlayScreen screen, float x, float y) {
 		super(screen, x, y);
 
 		// Set our current and previous state initial animation
-		this.currentState = State.STANDDOWN;
-		this.previousState = State.STANDDOWN;
+		currentState = State.STANDDOWN;
+		previousState = State.STANDDOWN;
 
-		this.walkLeft = new Animation(0.2f, this.defineAnimation(0, 6, 50, 20, 60, 70));
-		this.walkRight = new Animation(0.2f, this.defineAnimation(7, 13, 50, 20, 60, 70));
-		this.walkDown = new Animation(0.2f, this.defineAnimation(14, 20, 50, 20, 60, 70));
-		this.walkUp = new Animation(0.2f, this.defineAnimation(21, 27, 50, 20, 60, 70));
+		walkLeft = new Animation(0.2f, defineAnimation(0, 6, 50, 20, 60, 70));
+		walkRight = new Animation(0.2f, defineAnimation(7, 13, 50, 20, 60, 70));
+		walkDown = new Animation(0.2f, defineAnimation(14, 20, 50, 20, 60, 70));
+		walkUp = new Animation(0.2f, defineAnimation(21, 27, 50, 20, 60, 70));
 
-		this.standLeft = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 200, 20, 60, 70));
-		this.standRight = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 500, 20, 60, 70));
-		this.standDown = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 850, 20, 60, 70));
-		this.standUp = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 1250, 20, 60, 70));
+		standLeft = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 200, 20, 60, 70));
+		standRight = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 500, 20, 60, 70));
+		standDown = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 850, 20, 60, 70));
+		standUp = new Animation(0, new TextureRegion(screen.getAtlas().findRegion("Link"), 1250, 20, 60, 70));
 
-		this.stateTimer = 0;
-		this.setBounds(0, 0, 60 / Constants.PPM, 70 / Constants.PPM);
+		stateTimer = 0;
+		setBounds(0, 0, 60 / Constants.PPM, 70 / Constants.PPM);
 	}
 
-	@Override
-	public void isMoving() {
-		// Change the constant on false if the player stop moving
-		if (this.b2body.getLinearVelocity().x == 0 && this.b2body.getLinearVelocity().y == 0) {
-			this.isMoving = false;
-		} else {
-			this.isMoving = true;
-		}
-	}
-
-	@Override
-	public void update(float dt) {
-		this.setPosition(this.b2body.getPosition().x - this.getWidth() / 2,
-				this.b2body.getPosition().y - this.getHeight() / 2);
-		this.setRegion(this.getFrame(dt));
-	}
-
+	// **************************************************
+	// Getters
+	// **************************************************
 	@Override
 	public TextureRegion getFrame(float dt) {
 		TextureRegion region;
 
 		// Set our current position
-		this.currentState = this.getState();
+		currentState = getState();
 
-		switch (this.currentState) {
+		switch (currentState) {
 		case UP:
-			region = this.walkUp.getKeyFrame(this.stateTimer, true);
+			region = walkUp.getKeyFrame(stateTimer, true);
 			break;
 		case RIGHT:
-			region = this.walkRight.getKeyFrame(this.stateTimer, true);
+			region = walkRight.getKeyFrame(stateTimer, true);
 			break;
 		case DOWN:
-			region = this.walkDown.getKeyFrame(this.stateTimer, true);
+			region = walkDown.getKeyFrame(stateTimer, true);
 			break;
 		case LEFT:
-			region = this.walkLeft.getKeyFrame(this.stateTimer, true);
+			region = walkLeft.getKeyFrame(stateTimer, true);
 			break;
 		case STANDUP:
-			region = this.standUp.getKeyFrame(this.stateTimer, true);
+			region = standUp.getKeyFrame(stateTimer, true);
 			break;
 		case STANDRIGHT:
-			region = this.standRight.getKeyFrame(this.stateTimer, true);
+			region = standRight.getKeyFrame(stateTimer, true);
 			break;
 		case STANDDOWN:
-			region = this.standDown.getKeyFrame(this.stateTimer, true);
+			region = standDown.getKeyFrame(stateTimer, true);
 			break;
 		case STANDLEFT:
-			region = this.standLeft.getKeyFrame(this.stateTimer, true);
+			region = standLeft.getKeyFrame(stateTimer, true);
 			break;
 		default:
-			region = this.standDown.getKeyFrame(this.stateTimer, true);
+			region = standDown.getKeyFrame(stateTimer, true);
 			break;
 		}
 
-		this.stateTimer = this.currentState == this.previousState ? this.stateTimer + dt : 0;
-		this.previousState = this.currentState;
+		stateTimer = currentState == previousState ? stateTimer + dt : 0;
+		previousState = currentState;
 		return region;
 	}
-
+	
+	/**
+	 * Return the actual state of the villager.
+	 * @return
+	 * State
+	 */
 	@Override
 	public State getState() {
-		if (this.b2body.getLinearVelocity().y > 0) {
+		if (b2body.getLinearVelocity().y > 0) {
 			return State.UP;
 		}
-		if (this.b2body.getLinearVelocity().y < 0) {
+		if (b2body.getLinearVelocity().y < 0) {
 			return State.DOWN;
 		}
-		if (this.b2body.getLinearVelocity().x > 0) {
+		if (b2body.getLinearVelocity().x > 0) {
 			return State.RIGHT;
 		}
-		if (this.b2body.getLinearVelocity().x < 0) {
+		if (b2body.getLinearVelocity().x < 0) {
 			return State.LEFT;
 		}
 
-		if (this.isMoving && this.previousState == State.UP) {
+		if (isMoving && previousState == State.UP) {
 			return State.STANDUP;
 		}
-		if (this.isMoving && this.previousState == State.DOWN) {
+		if (isMoving && previousState == State.DOWN) {
 			return State.STANDDOWN;
 		}
-		if (this.isMoving && this.previousState == State.RIGHT) {
+		if (isMoving && previousState == State.RIGHT) {
 			return State.STANDRIGHT;
 		}
-		if (this.isMoving && this.previousState == State.LEFT) {
+		if (isMoving && previousState == State.LEFT) {
 			return State.STANDLEFT;
 		}
 
-		return this.currentState;
+		return currentState;
 	}
-
+	
+	// **************************************************
+	// Setters
+	// **************************************************
 	@Override
-	public void movePath() {
-		if (this.b2body.getLinearVelocity().x <= 0.1f) {
-			this.b2body.applyLinearImpulse(new Vector2(0.3f, 0), this.b2body.getWorldCenter(), true);
+	public void setMoving() {
+		// Change the constant on false if the player stop moving
+		if (b2body.getLinearVelocity().x == 0 && b2body.getLinearVelocity().y == 0) {
+			isMoving = false;
+		} else {
+			isMoving = true;
 		}
 	}
-
+	
+	// **************************************************
+	// Private Methods
+	// **************************************************
+	/**
+	 * Define the player's animation
+	 * @param init Position of the first image.
+	 * @param limit Position of the last image.
+	 * @param posX Position of the image's lower left corner.
+	 * @param posY Position of the image's upper left corner.
+	 * @param width Image's width.
+	 * @param height Image's height.
+	 * @return
+	 * frames
+	 */
+	private Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
+		Array<TextureRegion> frames = new Array<TextureRegion>();
+		for (int i = init; i < limit; i++) {
+			frames.add(new TextureRegion(screen.getAtlas().findRegion("Link"), i * posX, posY, width, height));
+		}
+		return frames;
+	}
+	// **************************************************
+	// Public Methods
+	// **************************************************
 	@Override
-	public void defineNPC() {
+	protected void defineNPC(float x, float y) {
 		BodyDef bdef = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
 
 		// Set the player's initial position and the type of body used
-		bdef.position.set(375 / Constants.PPM, 650 / Constants.PPM);
+		bdef.position.set(x/Constants.PPM, y/Constants.PPM);
 		bdef.type = BodyDef.BodyType.DynamicBody;
 
-		this.b2body = this.world.createBody(bdef);
+		b2body = world.createBody(bdef);
 
 		// Set the body form, a circle with a radius of 7
-		shape.setRadius(7f / Constants.PPM);
+		shape.setRadius(7f/Constants.PPM);
 
 		fdef.filter.categoryBits = Constants.NPC_BIT;
 		fdef.filter.maskBits = Constants.DEFAULT_BIT | Constants.LINK_BIT | Constants.PLANT_BIT | Constants.NPC_BIT;
 
 		fdef.shape = shape;
-		this.b2body.createFixture(fdef);
+		b2body.createFixture(fdef);
 	}
+	
+	@Override
+	public void movePathLine(float timer1, float timer2, boolean yAxe) {
+		timer += 0.005f;
+		
+		if (!yAxe) {
+			if (timer < timer1 && b2body.getLinearVelocity().x <= 0.1f) {
+				b2body.applyLinearImpulse(new Vector2(0.2f, 0), b2body.getWorldCenter(), true);
+			} else if (timer > timer1 && timer < timer1 + timer2 && b2body.getLinearVelocity().x >= -0.1f){
+				b2body.applyLinearImpulse(new Vector2(-0.2f, 0), b2body.getWorldCenter(), true);
+			}
+		} else {
+			if (timer < timer1 && b2body.getLinearVelocity().y <= 0.1f) {
+				b2body.applyLinearImpulse(new Vector2(0, 0.2f), b2body.getWorldCenter(), true);
+			} else if (timer > timer1 && timer < timer1 + timer2 && b2body.getLinearVelocity().y >= -0.1f){
+				b2body.applyLinearImpulse(new Vector2(0, -0.2f), b2body.getWorldCenter(), true);
+			}
+		}
+		
+		if (timer > timer1 + timer2) {
+			timer = 0;
+		}
+	}
+	
+	@Override
+	public void movePathSquare(float timerPosX, float timerNegY, float timerNegX, float timerPosY) {
+		timer += 0.005f;
+		float yNeg = timerPosX + timerNegY;
+		float xNeg = yNeg + timerNegX;
+		float yPos = xNeg + timerPosY;
 
-	public Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
-		Array<TextureRegion> frames = new Array<TextureRegion>();
-
-		for (int i = init; i < limit; i++) {
-			frames.add(new TextureRegion(this.screen.getAtlas().findRegion("Link"), i * posX, posY, width, height));
+		if (timer < timerPosX && b2body.getLinearVelocity().x <= 0.1f && !verticalAxe) {
+			stopMoving(stopMovingXPos);
+			b2body.applyLinearImpulse(new Vector2(0.2f, 0), b2body.getWorldCenter(), true);
+		} else if (timer < yNeg && b2body.getLinearVelocity().y >= -0.1f && verticalAxe){
+			stopMoving(stopMovingYNeg);
+			b2body.applyLinearImpulse(new Vector2(0, -0.2f), b2body.getWorldCenter(), true);
+		} else if (timer > yNeg && timer < xNeg && b2body.getLinearVelocity().x >= -0.1f && !verticalAxe){
+			stopMoving(stopMovingXNeg);
+			b2body.applyLinearImpulse(new Vector2(-0.2f, 0), b2body.getWorldCenter(), true);
+		} else if (timer > xNeg && timer < yPos && b2body.getLinearVelocity().y <= 0.1f && verticalAxe){
+			stopMoving(stopMovingYPos);
+			b2body.applyLinearImpulse(new Vector2(0, 0.2f), b2body.getWorldCenter(), true);
+		} else if (timer > yPos) {
+			timer = 0;
+			stopMovingXPos = true;
+			stopMovingYPos = true;
+			stopMovingXNeg = true;
+			stopMovingYNeg = true;
 		}
 
-		return frames;
+		if (timer < timerPosX || timer > yNeg && timer < xNeg) {
+			verticalAxe = false;
+		} else if (timer > timerPosX && timer < yNeg || timer > xNeg) {
+			verticalAxe = true;
+		}
+	}
+	
+	public void stopMoving(boolean stopMoving) {
+		if (stopMoving) {
+			b2body.setLinearVelocity(new Vector2(0, 0));
+		}
+		stopMoving = false;
+	}
+
+	@Override
+	public void update(float dt) {
+		setPosition(b2body.getPosition().x - getWidth() / 2,
+				b2body.getPosition().y - getHeight() / 2);
+		this.setRegion(getFrame(dt));
 	}
 }

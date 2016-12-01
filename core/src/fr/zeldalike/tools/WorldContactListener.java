@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import fr.zeldalike.sprites.InteractiveTileObject;
 
 public class WorldContactListener implements ContactListener{
-
+	// **************************************************
+	// Constructors
+	// **************************************************
 	@Override
 	public void beginContact(Contact contact) {
 		Fixture fixA = contact.getFixtureA();
@@ -24,7 +26,10 @@ public class WorldContactListener implements ContactListener{
 			}
 		}
 	}
-
+	
+	// **************************************************
+	// Public Methods
+	// **************************************************
 	@Override
 	public void endContact(Contact contact) {
 		

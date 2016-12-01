@@ -15,8 +15,14 @@ import fr.zeldalike.sprites.Plant;
 //import fr.zeldalike.sprites.Ruby;
 
 public class B2WorldCreator {
+	// **************************************************
+	// Fields
+	// **************************************************
 	private Body body;
 	
+	// **************************************************
+	// Constructors
+	// **************************************************
 	public B2WorldCreator(World world, TiledMap map) {
 		BodyDef bdef = new BodyDef();
 		PolygonShape shape = new PolygonShape();
@@ -28,11 +34,11 @@ public class B2WorldCreator {
 			bdef.type = BodyDef.BodyType.StaticBody;
 			bdef.position.set((rect.getX() + (rect.getWidth()/2))/Constants.PPM, (rect.getY() + (rect.getHeight()/2))/Constants.PPM);
 
-			this.body = world.createBody(bdef);
+			body = world.createBody(bdef);
 
 			shape.setAsBox((rect.getWidth()/2)/Constants.PPM, (rect.getHeight()/2)/Constants.PPM);
 			fdef.shape = shape;
-			this.body.createFixture(fdef);
+			body.createFixture(fdef);
 		}
 		
 		// Create plants bodies/fixtures
@@ -41,12 +47,5 @@ public class B2WorldCreator {
 
 				new Plant(world, map, rect);
 		}
-
-//		// Create rubis bodies/fixtures
-//		for(MapObject object : map.getLayers().get("").getObjects().getByType(RectangleMapObject.class)) {
-//				Rectangle rect = ((RectangleMapObject) object).getRectangle();
-//
-//				new Ruby(world, map, rect);
-//		}
 	}
 }
