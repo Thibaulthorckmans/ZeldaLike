@@ -12,8 +12,8 @@ public class Plant extends InteractiveTileObject {
 	// **************************************************
 	public Plant(World world, TiledMap map, Rectangle bounds) {
 		super(world, map, bounds);
-		fixture.setUserData(this);
-		setCategoryFilter(Constants.PLANT_BIT);
+		this.fixture.setUserData(this);
+		this.setCategoryFilter(Constants.PLANT_BIT);
 	}
 
 	// **************************************************
@@ -21,7 +21,7 @@ public class Plant extends InteractiveTileObject {
 	// **************************************************
 	@Override
 	public void onHeadHit() {
-		setCategoryFilter(Constants.DESTROYED_PLANT);
-//		getCell().setTile(null);
+		this.setCategoryFilter(Constants.DESTROYED_PLANT);
+		//getCell().setTile(null);
 	}
 }

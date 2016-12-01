@@ -24,7 +24,7 @@ public abstract class InteractiveTileObject {
 	protected Rectangle bounds;
 	protected Body body;
 	protected Fixture fixture;
-	
+
 	// **************************************************
 	// Constructors
 	// **************************************************
@@ -32,34 +32,34 @@ public abstract class InteractiveTileObject {
 		this.world = world;
 		this.map = map;
 		this.bounds = bounds;
-		
+
 		BodyDef bdef = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
-		
+
 		bdef.type = BodyDef.BodyType.StaticBody;
-		bdef.position.set((bounds.getX() + bounds.getWidth()/2)/Constants.PPM, (bounds.getY() + bounds.getHeight()/2)/Constants.PPM);
-		
-		body = world.createBody(bdef);
-		
+		bdef.position.set((bounds.getX() + (bounds.getWidth()/2))/Constants.PPM, (bounds.getY() + (bounds.getHeight()/2))/Constants.PPM);
+
+		this.body = world.createBody(bdef);
+
 		shape.setAsBox((bounds.getWidth()/2)/Constants.PPM, (bounds.getHeight()/2)/Constants.PPM);
 		fdef.shape = shape;
-		fixture = body.createFixture(fdef);
+		this.fixture = this.body.createFixture(fdef);
 	}
-	
+
 	// **************************************************
 	// Public Methods
 	// **************************************************
 	public abstract void onHeadHit();
-	
+
 	public void setCategoryFilter(short filterBit) {
 		Filter filter = new Filter();
 		filter.categoryBits = filterBit;
-		fixture.setFilterData(filter);
+		this.fixture.setFilterData(filter);
 	}
-	
+
 	public TiledMapTileLayer.Cell getCell() {
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Plant");
-		return layer.getCell((int)(body.getPosition().x * Constants.PPM / 16), (int)(body.getPosition().y * Constants.PPM / 16));
+		TiledMapTileLayer layer = (TiledMapTileLayer) this.map.getLayers().get("Plant");
+		return layer.getCell((int)((this.body.getPosition().x * Constants.PPM) / 16), (int)((this.body.getPosition().y * Constants.PPM) / 16));
 	}
 }

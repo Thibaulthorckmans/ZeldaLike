@@ -15,29 +15,29 @@ public abstract class NonPlayableCharacter extends Sprite{
 	protected World world;
 	protected PlayScreen screen;
 	public Body b2body;
-	
+
 	// **************************************************
 	// Constructors
 	// **************************************************
 	public NonPlayableCharacter(PlayScreen screen, float x, float y) {
-		world = screen.getWorld();
+		this.world = screen.getWorld();
 		this.screen = screen;
-		setPosition(x, y);
-		defineNPC(x, y);
+		this.setPosition(x, y);
+		this.defineNPC(x, y);
 	}
-	
+
 	// **************************************************
 	// Setters
 	// **************************************************
 	protected abstract TextureRegion getFrame(float dt);
-	
+
 	protected abstract State getState();
-	
+
 	// **************************************************
 	// Setters
 	// **************************************************
 	protected abstract void setMoving();
-	
+
 	// **************************************************
 	// Protected Methods
 	// **************************************************
@@ -48,7 +48,7 @@ public abstract class NonPlayableCharacter extends Sprite{
 	 * @param	yAxe	Define if the villager move on the y-axis or not
 	 */
 	protected abstract void movePathLine(float timer1, float timer2, boolean yAxe);
-	
+
 	/**
 	 * Move a villager with a fixed timing on a square
 	 * @param	timerPosX	Travel time on the positive x-axis
@@ -57,11 +57,11 @@ public abstract class NonPlayableCharacter extends Sprite{
 	 * @param	timerNegY	Travel time on the negative y-axis
 	 */
 	protected abstract void movePathSquare(float timerPosX, float timerNegX, float timerNegY, float timerPosY);
-	
+
 	/**
 	 * Define the player's initial position, his collision body and the elements that interact with him.
 	 */
 	protected abstract void defineNPC(float x, float y);
-	
+
 	protected abstract void update(float dt);
 }

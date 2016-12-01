@@ -19,7 +19,7 @@ public class B2WorldCreator {
 	// Fields
 	// **************************************************
 	private Body body;
-	
+
 	// **************************************************
 	// Constructors
 	// **************************************************
@@ -27,25 +27,25 @@ public class B2WorldCreator {
 		BodyDef bdef = new BodyDef();
 		PolygonShape shape = new PolygonShape();
 		FixtureDef fdef = new FixtureDef();
-		
+
 		for(MapObject object : map.getLayers().get("col_Block").getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
 			bdef.type = BodyDef.BodyType.StaticBody;
 			bdef.position.set((rect.getX() + (rect.getWidth()/2))/Constants.PPM, (rect.getY() + (rect.getHeight()/2))/Constants.PPM);
 
-			body = world.createBody(bdef);
+			this.body = world.createBody(bdef);
 
 			shape.setAsBox((rect.getWidth()/2)/Constants.PPM, (rect.getHeight()/2)/Constants.PPM);
 			fdef.shape = shape;
-			body.createFixture(fdef);
+			this.body.createFixture(fdef);
 		}
-		
+
 		// Create plants bodies/fixtures
 		for(MapObject object : map.getLayers().get("col_Plant").getObjects().getByType(RectangleMapObject.class)) {
-				Rectangle rect = ((RectangleMapObject) object).getRectangle();
+			Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-				new Plant(world, map, rect);
+			new Plant(world, map, rect);
 		}
 	}
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import fr.zeldalike.assets.Constants;
 import fr.zeldalike.game.Main;
 import fr.zeldalike.scenes.Hud;
+import fr.zeldalike.scenes.Inventory;
 import fr.zeldalike.sprites.Avatar;
 import fr.zeldalike.sprites.Villager;
 import fr.zeldalike.tools.B2WorldCreator;
@@ -36,6 +37,7 @@ public class PlayScreen implements Screen {
 	// Player variables
 	private TextureAtlas atlas;
 	private Avatar player;
+	private Inventory inventory;
 	// NPC's variables
 	private Villager runningVillager;
 	// Music variables
@@ -46,62 +48,65 @@ public class PlayScreen implements Screen {
 	// **************************************************
 	public PlayScreen(Main game) {
 		this.game = game;
-		mainCam = new Camera();
-		mainMap = new Map("Village");
-		hud = new Hud(game.batch);
+		this.mainCam = new Camera();
+		this.mainMap = new Map("Village");
+		this.hud = new Hud(game.batch);
+		this.inventory = new Inventory(game.batch);
 
 		// Create our Box2D world, setting no gravity and allow bodies to sleep
-		world = new World(new Vector2(0, 0), true);
+		this.world = new World(new Vector2(0, 0), true);
 
 		// Allows for debug lines of our Box2D world
-		b2dr = new Box2DDebugRenderer();
+		this.b2dr = new Box2DDebugRenderer();
 
-		new B2WorldCreator(world, mainMap.getMap());
+		new B2WorldCreator(this.world, this.mainMap.getMap());
 
 		// Create the avatar in our game world
-		atlas = new TextureAtlas("Sprites/Link.pack");
-		player = new Avatar(world, this);
+		this.atlas = new TextureAtlas("Sprites/Link.pack");
+		this.player = new Avatar(this.world, this);
+		this.player.setInventory(this.inventory);
 
-		world.setContactListener(new WorldContactListener());
+		this.world.setContactListener(new WorldContactListener());
 
 		// Launch our main theme music, set on looping and is volume
-		music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
-		music.setLooping(true);
-		music.setVolume(10/Constants.PPM);
-		music.play();
+		this.music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
+		this.music.setLooping(true);
+		this.music.setVolume(10/Constants.PPM);
+		this.music.play();
 
 		//
-		runningVillager = new Villager(this, 310, 700);
+		this.runningVillager = new Villager(this, 310, 700);
 
 		// Set the layers
-		mainMap.setLayers();
+		this.mainMap.setLayers();
 	}
 
 	// **************************************************
 	// Getters
 	// **************************************************
 	public TextureAtlas getAtlas() {
-		return atlas;
+		return this.atlas;
 	}
 
 	public World getWorld() {
-		return world;
+		return this.world;
 	}
-	
+
 	// **************************************************
 	// Setters
 	// **************************************************
-	
+
+
 	// **************************************************
 	// Public Methods
 	// **************************************************
 	@Override
 	public void render(float delta) {
-		update(delta);
+		this.update(delta);
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.V)) {
 			//this.mainMap.getMap().dispose();
-			mainMap.setMap("donjonTest");
+			this.mainMap.setMap("donjonTest");
 		}
 
 		// Clear the game screen with black
@@ -109,65 +114,78 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Render our back plan layers
-		mainMap.renderLayers(mainMap.getBackPlan());
+		this.mainMap.renderLayers(this.mainMap.getBackPlan());
 
 		// Render our Box2DDebugLines
-		b2dr.render(world, mainCam.getGameCam().combined);
+		this.b2dr.render(this.world, this.mainCam.getGameCam().combined);
 
 		// Render our player
-		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
-		game.batch.begin();
-		player.draw(game.batch);
-		runningVillager.draw(game.batch);
-		game.batch.end();
+		this.game.batch.setProjectionMatrix(this.mainCam.getGameCam().combined);
+		this.game.batch.begin();
+		this.player.draw(this.game.batch);
+		this.runningVillager.draw(this.game.batch);
+		this.game.batch.end();
 
 		// Render our first plan layers
-		mainMap.renderLayers(mainMap.getFirstPlan());
+		this.mainMap.renderLayers(this.mainMap.getFirstPlan());
 
 		// Set our batch to now draw the HUD camera sees
-		game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
-		hud.getStage().draw();
+		this.game.batch.setProjectionMatrix(this.hud.getStage().getCamera().combined);
+		this.hud.getStage().draw();
+
+		// Set our batch to now draw the HUD camera sees
+		this.game.batch.setProjectionMatrix(this.inventory.getStage().getCamera().combined);
+		this.inventory.getStage().draw();
 	}
-	
+
 	public void update(float dt) {
 		// Handle user input first
-		player.handleInput(dt);
+		this.player.handleInput(dt);
 
 		// Takes 1 step in the physics simulation (60 times per second)
-		world.step(1/60f, 6, 2);
+		this.world.step(1/60f, 6, 2);
 
-		player.update(dt);
-		runningVillager.update(dt);
-		player.setMoving();
-		runningVillager.setMoving();
-		
-		runningVillager.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
+		this.player.update(dt);
+		this.runningVillager.update(dt);
+		this.player.setMoving();
+		this.runningVillager.setMoving();
+
+		this.runningVillager.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
 
 		// Attach our gameCam to our player's coordinates
-		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
-		mainCam.update();
+		this.mainCam.setPosition(this.player.b2body.getPosition().x, this.player.b2body.getPosition().y);
+		this.mainCam.update();
 
 		// Tell our renderer to draw only what our camera can see in our game world
-		mainMap.setView(mainCam.getGameCam());
+		this.mainMap.setView(this.mainCam.getGameCam());
 
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-			hud.damage(1);
+			this.hud.damage(1);
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-			hud.cure(1);
+			this.hud.cure(1);
 		}
+
+
 		if(Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-			hud.setDialogBoxVisibility();
+			if(this.inventory.getInvetoryIsVisible()) {
+				this.hud.setImgButtonY(this.inventory.getNameItem());
+			}
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+			if(this.inventory.getInvetoryIsVisible()) {
+				this.hud.setImgButtonX(this.inventory.getNameItem());
+			}
 		}
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// Update our game viewport
-		mainCam.resize(width, height);
+		this.mainCam.resize(width, height);
 	}
-	
+
 	@Override
 	public void show() {}
 
@@ -182,8 +200,8 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		mainMap.dispose();
-		world.dispose();
-		hud.dispose();
+		this.mainMap.dispose();
+		this.world.dispose();
+		this.hud.dispose();
 	}
 }

@@ -21,22 +21,22 @@ public class Camera {
 	// **************************************************
 	public Camera() {
 		// Create cam used to follow through the world
-		gameCam = new OrthographicCamera();
+		this.gameCam = new OrthographicCamera();
 		// Create a FitViewport to maintain virtual aspect ratio despite screen size
-		gamePort = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gameCam);
+		this.gamePort = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, this.gameCam);
 		// Initially set our gameCam to be centered correctly at the start of the game
-		gameCam.position.set(gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2, 0);
+		this.gameCam.position.set(this.gamePort.getWorldWidth()/2, this.gamePort.getWorldHeight()/2, 0);
 	}
 
 	// **************************************************
 	// Getters
 	// **************************************************
 	public Viewport getGamePort() {
-		return gamePort;
+		return this.gamePort;
 	}
-	
+
 	public OrthographicCamera getGameCam() {
-		return gameCam;
+		return this.gameCam;
 	}
 
 	// **************************************************
@@ -49,7 +49,7 @@ public class Camera {
 	public void setGameCam(OrthographicCamera gameCam) {
 		this.gameCam = gameCam;
 	}
-	
+
 	// **************************************************
 	// Public Methods
 	// **************************************************
@@ -59,15 +59,15 @@ public class Camera {
 	 * @param y Position on the y axis.
 	 */
 	public void setPosition(float x, float y) {
-		gameCam.position.x = x;
-		gameCam.position.y = y;
+		this.gameCam.position.x = x;
+		this.gameCam.position.y = y;
 	}
 
 	public void update() {
-		gameCam.update();
+		this.gameCam.update();
 	}
 
 	public void resize(int width, int height) {
-		gamePort.update(width, height);
+		this.gamePort.update(width, height);
 	}
 }

@@ -17,21 +17,21 @@ Bottle
   orig: 16, 16
   offset: 0, 0
   index: -1
-MedicineofLife
+RedPotion
   rotate: false
   xy: 32, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-MedicineofLifeandMagic
+BluePotion
   rotate: false
   xy: 48, 0
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-MedicineofMagic
+GreenPotion
   rotate: false
   xy: 64, 0
   size: 16, 16

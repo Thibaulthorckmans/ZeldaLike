@@ -7,15 +7,15 @@ public class Constants {
 	// **************************************************
 	// Constants
 	// **************************************************
-	
+
 	/** Used to scale some parameters, value is {@value #PPM}. */
 	public static final float PPM = 100;
-	
+
 	/** Used to define the camera's width, value is {@value #V_WIDTH}. */
 	public static final int V_WIDTH = 500;
 	/** Used to define the camera's height, value is {@value #V_HEIGHT}. */
 	public static final int V_HEIGHT = 333;
-	
+
 	/** Used to define the collision between elements, value is {@value #DEFAULT_BIT}. */
 	public static final short DEFAULT_BIT = 1;
 	/** Used to define the collision between elements, value is {@value #LINK_BIT}. */

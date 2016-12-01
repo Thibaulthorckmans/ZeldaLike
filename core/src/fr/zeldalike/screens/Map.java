@@ -27,101 +27,101 @@ public class Map {
 	// **************************************************
 	public Map(String mapName) {
 		// Load our map and setup the renderer
-		mapLoader = new TmxMapLoader();
-		map = mapLoader.load("Maps/" + mapName + ".tmx");
-		renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
+		this.mapLoader = new TmxMapLoader();
+		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
+		this.renderer = new OrthogonalTiledMapRenderer(this.map, 1/Constants.PPM);
 	}
-	
+
 	// **************************************************
 	// Getters
 	// **************************************************
 	public TiledMap getMap() {
-		return map;
+		return this.map;
 	}
-	
+
 	public int[] getBackPlan() {
-		return backPlan;
+		return this.backPlan;
 	}
 
 	public int[] getFirstPlan() {
-		return firstPlan;
+		return this.firstPlan;
 	}
-	
+
 	// **************************************************
 	// Setters
 	// **************************************************
 	public void setMap(String mapName) {
-		mapLoader = new TmxMapLoader();
-		map = mapLoader.load("Maps/" + mapName + ".tmx");
-		renderer.setMap(map);
-		setLayers();
+		this.mapLoader = new TmxMapLoader();
+		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
+		this.renderer.setMap(this.map);
+		this.setLayers();
 	}
 	public void setRenderer() {
-		renderer.setMap(map);
+		this.renderer.setMap(this.map);
 	}
 
 	public void setLayers() {
-		setBackPlan();
-		setFirstPlan();
+		this.setBackPlan();
+		this.setFirstPlan();
 	}
-	
+
 	public void setBackPlan() {
-		int nbLayer = map.getLayers().getCount();
+		int nbLayer = this.map.getLayers().getCount();
 		List<Integer> layers = new ArrayList<Integer>();
 
 		for(int i = 0; i < nbLayer; i++) {
-			String nameLayer = map.getLayers().get(i).getName();
-			
+			String nameLayer = this.map.getLayers().get(i).getName();
+
 			if(nameLayer.contains("col_") || nameLayer.contains("fp_")) {
 				break;
 			} else {
 				layers.add(i);
 			}
 		}
-		
+
 		int[] tab = new int[layers.size()];
-		
+
 		for(int i = 0; i < tab.length; i++) {
 			tab[i] = layers.get(i);
 		}
-		
-		backPlan = tab;
+
+		this.backPlan = tab;
 	}
-	
+
 	public void setFirstPlan() {
-		int nbLayer = map.getLayers().getCount();
+		int nbLayer = this.map.getLayers().getCount();
 		List<Integer> layers = new ArrayList<Integer>();
 
 		for(int i = 0; i < nbLayer; i++) {
-			String nameLayer = map.getLayers().get(i).getName();
-			
+			String nameLayer = this.map.getLayers().get(i).getName();
+
 			if(nameLayer.contains("fp_")) {
 				layers.add(i);
 			}
 		}
-		
+
 		int[] tab = new int[layers.size()];
-		
+
 		for(int i = 0; i < tab.length; i++) {
 			tab[i] =  layers.get(i);
 		}
-		
-		firstPlan=  tab;
+
+		this.firstPlan=  tab;
 	}
 
 	public void setView(OrthographicCamera cam) {
-		renderer.setView(cam);
+		this.renderer.setView(cam);
 	}
-	
+
 	// **************************************************
 	// Public Methods
 	// **************************************************
 	public void dispose() {
-		map.dispose();
-		renderer.dispose();
+		this.map.dispose();
+		this.renderer.dispose();
 	}
 
 	public void renderLayers(int[] layer) {
-		renderer.render(layer);
+		this.renderer.render(layer);
 	}
 }

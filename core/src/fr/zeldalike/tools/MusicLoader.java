@@ -8,7 +8,7 @@ public class MusicLoader {
 	// Fields
 	// **************************************************
 	public static AssetManager manager;
-	
+
 	// **************************************************
 	// Public Methods
 	// **************************************************
@@ -17,15 +17,15 @@ public class MusicLoader {
 	 */
 	public void loadMusic() {
 		manager = new AssetManager();
-		
+
 		manager.load("Audio/Music/MainTheme.ogg", Music.class);
 		manager.load("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
-		
-//		manager.load("Audio/Sound/Attack.wav", Sound.class);
-		
+
+		//manager.load("Audio/Sound/Attack.wav", Sound.class);
+
 		manager.finishLoading();
 	}
-	
+
 	public void update() {
 		manager.update();
 	}
