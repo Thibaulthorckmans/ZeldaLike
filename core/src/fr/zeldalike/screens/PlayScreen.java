@@ -131,6 +131,15 @@ public class PlayScreen implements Screen {
 		// Set our batch to now draw the HUD camera sees
 		this.game.batch.setProjectionMatrix(this.inventory.getStage().getCamera().combined);
 		this.inventory.getStage().draw();
+		
+		// No heart of link active Game Over
+		if(this.hud.getHealth() == 0){
+			this.gameOver();
+				this.game.setScreen(new GameOver(this.game));
+				//sauvegarder partie DataSaveGame(class), faire appel a la methode save de DataSaveGame
+				
+				this.dispose();
+		}
 	}
 
 	public void update(float dt) {
