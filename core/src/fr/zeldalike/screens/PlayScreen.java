@@ -35,11 +35,11 @@ public class PlayScreen implements Screen {
 	private World world;
 	private Box2DDebugRenderer b2dr;
 	// Player variables
-	private TextureAtlas atlas;
+	private TextureAtlas atlasAvatar, atlasVillager;
 	private Avatar player;
 	private Inventory inventory;
 	// NPC's variables
-	private Villager runningVillager;
+	private Villager queen, runner;
 	// Music variables
 	private Music music;
 
@@ -48,48 +48,53 @@ public class PlayScreen implements Screen {
 	// **************************************************
 	public PlayScreen(Main game) {
 		this.game = game;
-		this.mainCam = new Camera();
-		this.mainMap = new Map("Village");
-		this.hud = new Hud(game.batch);
-		this.inventory = new Inventory(game.batch);
+		mainCam = new Camera();
+		mainMap = new Map("Village");
+		hud = new Hud(game.batch);
+		inventory = new Inventory(game.batch);
 
 		// Create our Box2D world, setting no gravity and allow bodies to sleep
-		this.world = new World(new Vector2(0, 0), true);
+		world = new World(new Vector2(0, 0), true);
 
 		// Allows for debug lines of our Box2D world
-		this.b2dr = new Box2DDebugRenderer();
+		b2dr = new Box2DDebugRenderer();
 
-		new B2WorldCreator(this.world, this.mainMap.getMap());
+		new B2WorldCreator(world, mainMap.getMap());
 
 		// Create the avatar in our game world
-		this.atlas = new TextureAtlas("Sprites/Link.pack");
-		this.player = new Avatar(this.world, this);
-		this.player.setInventory(this.inventory);
+		atlasAvatar = new TextureAtlas("Sprites/Link.pack");
+		atlasVillager = new TextureAtlas("Sprites/NPC.pack");
+		player = new Avatar(world, this);
+		player.setInventory(inventory);
 
-		this.world.setContactListener(new WorldContactListener());
+		world.setContactListener(new WorldContactListener());
 
 		// Launch our main theme music, set on looping and is volume
-		this.music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
-		this.music.setLooping(true);
-		this.music.setVolume(10/Constants.PPM);
-		this.music.play();
+		music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
+		music.setLooping(true);
+		music.setVolume(10/Constants.PPM);
+		music.play();
 
 		//
-		this.runningVillager = new Villager(this, 310, 700);
+		runner = new Villager(this, 310, 700, "Runner");
+		queen = new Villager(this, 210, 520, "Queen");
 
 		// Set the layers
-		this.mainMap.setLayers();
+		mainMap.setLayers();
 	}
 
 	// **************************************************
 	// Getters
 	// **************************************************
-	public TextureAtlas getAtlas() {
-		return this.atlas;
+	public TextureAtlas getAtlasAvatar() {
+		return atlasAvatar;
+	}
+	public TextureAtlas getAtlasVillager() {
+		return atlasVillager;
 	}
 
 	public World getWorld() {
-		return this.world;
+		return world;
 	}
 
 	// **************************************************
@@ -102,84 +107,88 @@ public class PlayScreen implements Screen {
 	// **************************************************
 	@Override
 	public void render(float delta) {
-		this.update(delta);
+		update(delta);
 
 		// Clear the game screen with black
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Render our back plan layers
-		this.mainMap.renderLayers(this.mainMap.getBackPlan());
+		mainMap.renderLayers(mainMap.getBackPlan());
 
 		// Render our Box2DDebugLines
-		this.b2dr.render(this.world, this.mainCam.getGameCam().combined);
+		b2dr.render(world, mainCam.getGameCam().combined);
 
 		// Render our player
-		this.game.batch.setProjectionMatrix(this.mainCam.getGameCam().combined);
-		this.game.batch.begin();
-		this.player.draw(this.game.batch);
-		this.runningVillager.draw(this.game.batch);
-		this.game.batch.end();
+		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
+		game.batch.begin();
+		player.draw(game.batch);
+		runner.draw(game.batch);
+		queen.draw(game.batch);
+		game.batch.end();
 
 		// Render our first plan layers
-		this.mainMap.renderLayers(this.mainMap.getFirstPlan());
+		mainMap.renderLayers(mainMap.getFirstPlan());
 
 		// Set our batch to now draw the HUD camera sees
-		this.game.batch.setProjectionMatrix(this.hud.getStage().getCamera().combined);
-		this.hud.getStage().draw();
+		game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+		hud.getStage().draw();
 
 		// Set our batch to now draw the HUD camera sees
-		this.game.batch.setProjectionMatrix(this.inventory.getStage().getCamera().combined);
-		this.inventory.getStage().draw();
+		game.batch.setProjectionMatrix(inventory.getStage().getCamera().combined);
+		inventory.getStage().draw();
 		
 		// No heart of link active Game Over
-		if(this.hud.getHealth() == 0){
-			this.gameOver();
-				this.game.setScreen(new GameOver(this.game));
+		if(hud.getHealth() == 0){
+			gameOver();
+				game.setScreen(new GameOver(game));
 				//sauvegarder partie DataSaveGame(class), faire appel a la methode save de DataSaveGame
 				
-				this.dispose();
+				dispose();
 		}
 	}
 
 	public void update(float dt) {
 		// Handle user input first
-		this.player.handleInput(dt);
+		player.handleInput(dt);
 
 		// Takes 1 step in the physics simulation (60 times per second)
-		this.world.step(1/60f, 6, 2);
+		world.step(1/60f, 6, 2);
 
-		this.player.update(dt);
-		this.runningVillager.update(dt);
-		this.player.setMoving();
-		this.runningVillager.setMoving();
+		player.update(dt);
+		runner.update(dt);
+		queen.update(dt);
+		player.setMoving();
+		runner.setMoving();
+		queen.setMoving();
 
-		this.runningVillager.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
+		runner.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
+		queen.movePathLine(2.2f, 2.2f, true, false);
 
 		// Attach our gameCam to our player's coordinates
-		this.mainCam.setPosition(this.player.b2body.getPosition().x, this.player.b2body.getPosition().y);
-		this.mainCam.update();
+		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
+		mainCam.update();
 
 		// Tell our renderer to draw only what our camera can see in our game world
-		this.mainMap.setView(this.mainCam.getGameCam());
+		mainMap.setView(mainCam.getGameCam());
 
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-			this.hud.damage(1);
+			hud.damage(1);
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-			this.hud.cure(1);
+			hud.cure(1);
 		}
 
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-			if(this.inventory.getInvetoryIsVisible()) {
-				this.hud.setImgButtonY(this.inventory.getNameItem());
+			if(inventory.getInvetoryIsVisible()) {
+				hud.setImgButtonY(inventory.getNameItem());
 			}
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-			if(this.inventory.getInvetoryIsVisible()) {
-				this.hud.setImgButtonX(this.inventory.getNameItem());
+			if(inventory.getInvetoryIsVisible()) {
+				hud.setImgButtonX(inventory.getNameItem());
 			}
 		}
 	}
@@ -187,7 +196,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		// Update our game viewport
-		this.mainCam.resize(width, height);
+		mainCam.resize(width, height);
 	}
 
 	@Override
@@ -204,13 +213,13 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		this.mainMap.dispose();
-		this.world.dispose();
-		this.hud.dispose();
+		mainMap.dispose();
+		world.dispose();
+		hud.dispose();
 	}
 
 	public boolean gameOver(){
-		if((this.player.currentState == Avatar.State.DEAD) && (this.player.getStateTimer()>3)){
+		if((player.currentState == Avatar.State.DEAD) && (player.getStateTimer()>3)){
 			return true;
 		}
 		return false;

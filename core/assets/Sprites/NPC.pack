@@ -1,0 +1,26 @@
+
+NPC.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Queen
+  rotate: false
+  xy: 0, 0
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+Runner
+  rotate: false
+  xy: 242, 0
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+StaticVillager
+  rotate: false
+  xy: 484, 0
+  size: 116, 32
+  orig: 116, 32
+  offset: 0, 0
+  index: -1

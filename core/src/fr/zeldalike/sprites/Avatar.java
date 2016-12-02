@@ -52,37 +52,37 @@ public class Avatar extends Sprite {
 	 * Initialize the player's state, animations and his texture.
 	 */
 	public Avatar(World world, PlayScreen screen) {
-		super(screen.getAtlas().findRegion("Link"));
+		super(screen.getAtlasAvatar().findRegion("Link"));
 		this.world = world;
 
 		// Set our current and previous state initial animation
-		this.currentState = State.STANDDOWN;
-		this.previousState = State.STANDDOWN;
+		currentState = State.STANDDOWN;
+		previousState = State.STANDDOWN;
 
-		this.stateTimer = 0;
+		stateTimer = 0;
 
-		this.walkLeft = new Animation(0.1f, this.defineAnimation(0, 6, 50, 20, 60, 70));
-		this.walkRight = new Animation(0.1f, this.defineAnimation(7, 13, 50, 20, 60, 70));
-		this.walkDown = new Animation(0.1f, this.defineAnimation(14, 20, 50, 20, 60, 70));
-		this.walkUp = new Animation(0.1f, this.defineAnimation(21, 27, 50, 20, 60, 70));
+		walkLeft = new Animation(0.1f, defineAnimation(0, 6, 50, 20, 60, 70));
+		walkRight = new Animation(0.1f, defineAnimation(7, 13, 50, 20, 60, 70));
+		walkDown = new Animation(0.1f, defineAnimation(14, 20, 50, 20, 60, 70));
+		walkUp = new Animation(0.1f, defineAnimation(21, 27, 50, 20, 60, 70));
 
-		this.standLeft = new Animation(0, new TextureRegion(this.getTexture(), 200, 20, 60, 70));
-		this.standRight = new Animation(0, new TextureRegion(this.getTexture(), 500, 20, 60, 70));
-		this.standDown = new Animation(0, new TextureRegion(this.getTexture(), 850, 20, 60, 70));
-		this.standUp = new Animation(0, new TextureRegion(this.getTexture(), 1250, 20, 60, 70));
+		standLeft = new Animation(0, new TextureRegion(getTexture(), 200, 20, 60, 70));
+		standRight = new Animation(0, new TextureRegion(getTexture(), 500, 20, 60, 70));
+		standDown = new Animation(0, new TextureRegion(getTexture(), 850, 20, 60, 70));
+		standUp = new Animation(0, new TextureRegion(getTexture(), 1250, 20, 60, 70));
 
-		this.attackleft = new Animation(0.1f, this.defineAnimation(28, 35, 50, 20, 60, 70));
-		this.attackright = new Animation(0.1f, this.defineAnimation(36, 43, 50, 20, 60, 70));
-		this.attackup = new Animation(0.1f, this.defineAnimation(44, 50, 50, 20, 60, 70));
-		this.attackdown = new Animation(0.1f, this.defineAnimation(51, 56, 50, 20, 60, 70));
+		attackleft = new Animation(0.1f, defineAnimation(28, 35, 50, 20, 60, 70));
+		attackright = new Animation(0.1f, defineAnimation(36, 43, 50, 20, 60, 70));
+		attackup = new Animation(0.1f, defineAnimation(44, 50, 50, 20, 60, 70));
+		attackdown = new Animation(0.1f, defineAnimation(51, 56, 50, 20, 60, 70));
 
 		// Initial texture
-		this.avatarStand = new TextureRegion(this.getTexture(), 0, 0, 20, 25);
+		avatarStand = new TextureRegion(getTexture(), 0, 0, 20, 25);
 
 		// Define our avatar and set his sprite bounds
-		this.defineAvatar();
-		this.setBounds(0, 0, 60 / Constants.PPM, 70 / Constants.PPM);
-		this.setRegion(this.avatarStand);
+		defineAvatar();
+		setBounds(0, 0, 60 / Constants.PPM, 70 / Constants.PPM);
+		this.setRegion(avatarStand);
 	}
 
 	// **************************************************
@@ -92,74 +92,74 @@ public class Avatar extends Sprite {
 		TextureRegion region;
 
 		// Set our current position
-		this.currentState = this.getState();
+		currentState = getState();
 
-		switch (this.currentState) {
+		switch (currentState) {
 		case UP:
-			region = this.walkUp.getKeyFrame(this.stateTimer, true);
+			region = walkUp.getKeyFrame(stateTimer, true);
 			break;
 		case RIGHT:
-			region = this.walkRight.getKeyFrame(this.stateTimer, true);
+			region = walkRight.getKeyFrame(stateTimer, true);
 			break;
 		case DOWN:
-			region = this.walkDown.getKeyFrame(this.stateTimer, true);
+			region = walkDown.getKeyFrame(stateTimer, true);
 			break;
 		case LEFT:
-			region = this.walkLeft.getKeyFrame(this.stateTimer, true);
+			region = walkLeft.getKeyFrame(stateTimer, true);
 			break;
 		case STANDUP:
-			region = this.standUp.getKeyFrame(this.stateTimer, true);
+			region = standUp.getKeyFrame(stateTimer, true);
 			break;
 		case STANDRIGHT:
-			region = this.standRight.getKeyFrame(this.stateTimer, true);
+			region = standRight.getKeyFrame(stateTimer, true);
 			break;
 		case STANDDOWN:
-			region = this.standDown.getKeyFrame(this.stateTimer, true);
+			region = standDown.getKeyFrame(stateTimer, true);
 			break;
 		case STANDLEFT:
-			region = this.standLeft.getKeyFrame(this.stateTimer, true);
+			region = standLeft.getKeyFrame(stateTimer, true);
 			break;
 		case ATTACKRIGHT:
-			region = this.attackright.getKeyFrame(this.stateTimer, true);
-			if (this.stateTimer >= 0.7) {
-				this.stateTimer = 0;
-				this.currentState = State.STANDRIGHT;
+			region = attackright.getKeyFrame(stateTimer, true);
+			if (stateTimer >= 0.7) {
+				stateTimer = 0;
+				currentState = State.STANDRIGHT;
 			}
 			break;
 		case ATTACKUP:
-			region = this.attackup.getKeyFrame(this.stateTimer, true);
+			region = attackup.getKeyFrame(stateTimer, true);
 
-			if (this.stateTimer >= 0.7) {
-				this.stateTimer = 0;
-				this.currentState = State.STANDUP;
+			if (stateTimer >= 0.7) {
+				stateTimer = 0;
+				currentState = State.STANDUP;
 			}
 			break;
 		case ATTACKDOWN:
-			region = this.attackdown.getKeyFrame(this.stateTimer, true);
-			if (this.stateTimer >= 0.5) {
-				this.stateTimer = 0;
-				this.currentState = State.STANDDOWN;
+			region = attackdown.getKeyFrame(stateTimer, true);
+			if (stateTimer >= 0.5) {
+				stateTimer = 0;
+				currentState = State.STANDDOWN;
 
 			}
 			break;
 		case ATTACKLEFT:
-			region = this.attackleft.getKeyFrame(this.stateTimer, true);
+			region = attackleft.getKeyFrame(stateTimer, true);
 			// animation complete d'attaque
-			if (this.stateTimer >= 0.7) {
-				this.stateTimer = 0;
-				this.currentState = State.STANDLEFT;
+			if (stateTimer >= 0.7) {
+				stateTimer = 0;
+				currentState = State.STANDLEFT;
 			}
 			break;
 		case DEAD:
-			region = this.lunkDead;
+			region = lunkDead;
 			break;
 		default:
-			region = this.standDown.getKeyFrame(this.stateTimer, true);
+			region = standDown.getKeyFrame(stateTimer, true);
 			break;
 		}
 
-		this.stateTimer = this.currentState == this.previousState ? this.stateTimer + dt : 0;
-		this.previousState = this.currentState;
+		stateTimer = currentState == previousState ? stateTimer + dt : 0;
+		previousState = currentState;
 		return region;
 	}
 
@@ -172,128 +172,128 @@ public class Avatar extends Sprite {
 		FixtureDef fdef = new FixtureDef();
 		EdgeShape head = new EdgeShape();
 		head.set(new Vector2(0 / Constants.PPM, 0 / Constants.PPM), new Vector2(0 / Constants.PPM, 0 / Constants.PPM));
-		this.b2body.getFixtureList();
+		b2body.getFixtureList();
 		fdef.shape = head;
 		fdef.isSensor = false;
 
-		if ((this.b2body.getLinearVelocity().y > 0)
-				&& ((this.currentState != State.ATTACKUP) || (this.previousState != State.ATTACKUP))
-				&& ((this.currentState != State.ATTACKRIGHT) || (this.previousState != State.ATTACKRIGHT))
-				&& ((this.currentState != State.ATTACKLEFT) || (this.previousState != State.ATTACKLEFT))
-				&& ((this.currentState != State.ATTACKDOWN) || (this.previousState != State.ATTACKDOWN))) {
+		if ((b2body.getLinearVelocity().y > 0)
+				&& ((currentState != State.ATTACKUP) || (previousState != State.ATTACKUP))
+				&& ((currentState != State.ATTACKRIGHT) || (previousState != State.ATTACKRIGHT))
+				&& ((currentState != State.ATTACKLEFT) || (previousState != State.ATTACKLEFT))
+				&& ((currentState != State.ATTACKDOWN) || (previousState != State.ATTACKDOWN))) {
 			return State.UP;
 		}
-		if ((this.b2body.getLinearVelocity().y < 0)
-				&& ((this.currentState != State.ATTACKDOWN) || (this.previousState != State.ATTACKDOWN))
-				&& ((this.currentState != State.ATTACKRIGHT) || (this.previousState != State.ATTACKRIGHT))
-				&& ((this.currentState != State.ATTACKLEFT) || (this.previousState != State.ATTACKLEFT))
-				&& ((this.currentState != State.ATTACKUP) || (this.previousState != State.ATTACKUP))) {
+		if ((b2body.getLinearVelocity().y < 0)
+				&& ((currentState != State.ATTACKDOWN) || (previousState != State.ATTACKDOWN))
+				&& ((currentState != State.ATTACKRIGHT) || (previousState != State.ATTACKRIGHT))
+				&& ((currentState != State.ATTACKLEFT) || (previousState != State.ATTACKLEFT))
+				&& ((currentState != State.ATTACKUP) || (previousState != State.ATTACKUP))) {
 			return State.DOWN;
 		}
-		if ((this.b2body.getLinearVelocity().x > 0)
-				&& ((this.currentState != State.ATTACKRIGHT) || (this.previousState != State.ATTACKRIGHT))
-				&& ((this.currentState != State.ATTACKLEFT) || (this.previousState != State.ATTACKLEFT))
-				&& ((this.currentState != State.ATTACKUP) || (this.previousState != State.ATTACKUP))
-				&& ((this.currentState != State.ATTACKDOWN) || (this.previousState != State.ATTACKDOWN))) {
+		if ((b2body.getLinearVelocity().x > 0)
+				&& ((currentState != State.ATTACKRIGHT) || (previousState != State.ATTACKRIGHT))
+				&& ((currentState != State.ATTACKLEFT) || (previousState != State.ATTACKLEFT))
+				&& ((currentState != State.ATTACKUP) || (previousState != State.ATTACKUP))
+				&& ((currentState != State.ATTACKDOWN) || (previousState != State.ATTACKDOWN))) {
 			return State.RIGHT;
 		}
-		if ((this.b2body.getLinearVelocity().x < 0)
-				&& ((this.currentState != State.ATTACKLEFT) || (this.previousState != State.ATTACKLEFT))
-				&& ((this.currentState != State.ATTACKUP) || (this.previousState != State.ATTACKUP))
-				&& ((this.currentState != State.ATTACKDOWN) || (this.previousState != State.ATTACKDOWN))
-				&& ((this.currentState != State.ATTACKRIGHT) || (this.previousState != State.ATTACKRIGHT))) {
+		if ((b2body.getLinearVelocity().x < 0)
+				&& ((currentState != State.ATTACKLEFT) || (previousState != State.ATTACKLEFT))
+				&& ((currentState != State.ATTACKUP) || (previousState != State.ATTACKUP))
+				&& ((currentState != State.ATTACKDOWN) || (previousState != State.ATTACKDOWN))
+				&& ((currentState != State.ATTACKRIGHT) || (previousState != State.ATTACKRIGHT))) {
 			return State.LEFT;
 		}
 
-		if (!this.isMoving && (this.previousState == State.UP)) {
+		if (!isMoving && (previousState == State.UP)) {
 			return State.STANDUP;
 		}
-		if (!this.isMoving && (this.previousState == State.DOWN)) {
+		if (!isMoving && (previousState == State.DOWN)) {
 			return State.STANDDOWN;
 		}
-		if (!this.isMoving && (this.previousState == State.RIGHT)) {
+		if (!isMoving && (previousState == State.RIGHT)) {
 			return State.STANDRIGHT;
 		}
-		if (!this.isMoving && (this.previousState == State.LEFT)) {
+		if (!isMoving && (previousState == State.LEFT)) {
 			return State.STANDLEFT;
 		}
 
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
-				&& ((this.currentState == State.LEFT) || (this.currentState == State.STANDLEFT))) {
+				&& ((currentState == State.LEFT) || (currentState == State.STANDLEFT))) {
 			return State.ATTACKLEFT;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
-				&& ((this.currentState == State.RIGHT) || (this.currentState == State.STANDRIGHT))) {
+				&& ((currentState == State.RIGHT) || (currentState == State.STANDRIGHT))) {
 			return State.ATTACKRIGHT;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
-				&& ((this.currentState == State.UP) || (this.currentState == State.STANDUP))) {
+				&& ((currentState == State.UP) || (currentState == State.STANDUP))) {
 			return State.ATTACKUP;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)
-				&& ((this.currentState == State.DOWN) || (this.currentState == State.STANDDOWN))) {
+				&& ((currentState == State.DOWN) || (currentState == State.STANDDOWN))) {
 			return State.ATTACKDOWN;
 		}
-		if(this.lunkIsDead){
+		if(lunkIsDead){
 			return State.DEAD;
 		}
 
 		// Creation collision epee
-		if ((this.currentState == State.ATTACKLEFT)) {
+		if ((currentState == State.ATTACKLEFT)) {
 			head.set(new Vector2(-20 / Constants.PPM, 10 / Constants.PPM),
 					new Vector2(-20 / Constants.PPM, -10 / Constants.PPM));
 			fdef.isSensor = true;
 			// this.b2body.createFixture(head, this.stateTimer);
-			this.b2body.createFixture(fdef).setUserData("head");
+			b2body.createFixture(fdef).setUserData("head");
 
 		}
 
-		if (((this.currentState == State.ATTACKRIGHT) && (this.stateTimer <= 0.7))) {
+		if (((currentState == State.ATTACKRIGHT) && (stateTimer <= 0.7))) {
 			head.set(new Vector2(16 / Constants.PPM, -10 / Constants.PPM),
 					new Vector2(16 / Constants.PPM, 10 / Constants.PPM));
 			fdef.isSensor = true;
 			// this.b2body.createFixture(head, this.stateTimer);
-			this.b2body.createFixture(fdef).setUserData("head");
-			this.b2body.getFixtureList();
+			b2body.createFixture(fdef).setUserData("head");
+			b2body.getFixtureList();
 		}
 
-		if (((this.currentState == State.ATTACKUP) && (this.stateTimer <= 0.7))) {
+		if (((currentState == State.ATTACKUP) && (stateTimer <= 0.7))) {
 			head.set(new Vector2(10 / Constants.PPM, 20 / Constants.PPM),
 					new Vector2(-10 / Constants.PPM, 20 / Constants.PPM));
 			fdef.isSensor = true;
 			// this.b2body.createFixture(head, this.stateTimer);
-			this.b2body.createFixture(fdef).setUserData("head");
-			this.b2body.getFixtureList();
+			b2body.createFixture(fdef).setUserData("head");
+			b2body.getFixtureList();
 		}
 
-		if (((this.currentState == State.ATTACKDOWN) && (this.stateTimer <= 0.7))) {
+		if (((currentState == State.ATTACKDOWN) && (stateTimer <= 0.7))) {
 			head.set(new Vector2(-10 / Constants.PPM, -20 / Constants.PPM),
 					new Vector2(10 / Constants.PPM, -20 / Constants.PPM));
 			fdef.isSensor = true;
 			// this.b2body.createFixture(head, this.stateTimer);
-			this.b2body.createFixture(fdef).setUserData("head");
-			this.b2body.getFixtureList();
+			b2body.createFixture(fdef).setUserData("head");
+			b2body.getFixtureList();
 		}
 
-		return this.currentState;
+		return currentState;
 	}
 
 	public float getStateTimer() {
-		return this.stateTimer;
+		return stateTimer;
 	}
 
 	public boolean isLunkIsDead() {
-		return this.lunkIsDead;
+		return lunkIsDead;
 	}
 
 	// **************************************************
 	// Setters
 	// **************************************************
 	public void setMoving() {
-		if ((this.b2body.getLinearVelocity().x == 0) && (this.b2body.getLinearVelocity().y == 0)) {
-			this.isMoving = false;
+		if ((b2body.getLinearVelocity().x == 0) && (b2body.getLinearVelocity().y == 0)) {
+			isMoving = false;
 		} else {
-			this.isMoving = true;
+			isMoving = true;
 		}
 	}
 
@@ -306,7 +306,7 @@ public class Avatar extends Sprite {
 	}
 
 	public void setInventory(Inventory pInventory) {
-		this.inventory = pInventory;
+		inventory = pInventory;
 	}
 
 	// **************************************************
@@ -324,7 +324,7 @@ public class Avatar extends Sprite {
 		bdef.position.set(375 / Constants.PPM, 610 / Constants.PPM);
 		bdef.type = BodyDef.BodyType.DynamicBody;
 
-		this.b2body = this.world.createBody(bdef);
+		b2body = world.createBody(bdef);
 
 		// Set the body form, a circle with a radius of 7
 		shape.setRadius(7f / Constants.PPM);
@@ -333,14 +333,14 @@ public class Avatar extends Sprite {
 		fdef.filter.maskBits = Constants.DEFAULT_BIT | Constants.NPC_BIT | Constants.RUBY_BIT | Constants.PLANT_BIT;
 
 		fdef.shape = shape;
-		this.b2body.createFixture(fdef);
+		b2body.createFixture(fdef);
 
 		EdgeShape head = new EdgeShape();
 		head.set(new Vector2(-2 / Constants.PPM, 7 / Constants.PPM), new Vector2(2 / Constants.PPM, 7 / Constants.PPM));
 		fdef.shape = head;
 		fdef.isSensor = true;
 
-		this.b2body.createFixture(fdef).setUserData("head");
+		b2body.createFixture(fdef).setUserData("head");
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class Avatar extends Sprite {
 	private Array<TextureRegion> defineAnimation(int init, int limit, int posX, int posY, int width, int height) {
 		Array<TextureRegion> frames = new Array<TextureRegion>();
 		for (int i = init; i < limit; i++) {
-			frames.add(new TextureRegion(this.getTexture(), i * posX, posY, width, height));
+			frames.add(new TextureRegion(getTexture(), i * posX, posY, width, height));
 		}
 		return frames;
 	}
@@ -371,47 +371,47 @@ public class Avatar extends Sprite {
 	 */
 	public void handleInput(float dt) {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-			this.inventory.setInventoryVisibility();
+			inventory.setInventoryVisibility();
 		}
 
-		if(this.inventory.getInvetoryIsVisible()) {
+		if(inventory.getInvetoryIsVisible()) {
 			if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-				this.inventory.moveCursor(0, 1);
+				inventory.moveCursor(0, 1);
 			}
 			if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-				this.inventory.moveCursor(1, 0);
+				inventory.moveCursor(1, 0);
 			}
 			if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-				this.inventory.moveCursor(0, -1);
+				inventory.moveCursor(0, -1);
 			}
 			if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-				this.inventory.moveCursor(-1, 0);
+				inventory.moveCursor(-1, 0);
 			}
 		} else {
 			// Control our player with immediate impulses when a key is pressed and
 			// stop when nothing is pressed
-			if (Gdx.input.isKeyPressed(Input.Keys.UP) && (this.b2body.getLinearVelocity().y <= 0.5f)) {
-				this.b2body.applyLinearImpulse(new Vector2(0, 1), this.b2body.getWorldCenter(), true);
+			if (Gdx.input.isKeyPressed(Input.Keys.UP) && (b2body.getLinearVelocity().y <= 0.5f)) {
+				b2body.applyLinearImpulse(new Vector2(0, 1), b2body.getWorldCenter(), true);
 
-			} else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && (this.b2body.getLinearVelocity().y >= -0.5f)) {
-				this.b2body.applyLinearImpulse(new Vector2(0, -1), this.b2body.getWorldCenter(), true);
+			} else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && (b2body.getLinearVelocity().y >= -0.5f)) {
+				b2body.applyLinearImpulse(new Vector2(0, -1), b2body.getWorldCenter(), true);
 
-			} else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && (this.b2body.getLinearVelocity().x <= 0.5f)) {
-				this.b2body.applyLinearImpulse(new Vector2(1, 0), this.b2body.getWorldCenter(), true);
+			} else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && (b2body.getLinearVelocity().x <= 0.5f)) {
+				b2body.applyLinearImpulse(new Vector2(1, 0), b2body.getWorldCenter(), true);
 
-			} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && (this.b2body.getLinearVelocity().x >= -0.5f)) {
-				this.b2body.applyLinearImpulse(new Vector2(-1, 0), this.b2body.getWorldCenter(), true);
+			} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && (b2body.getLinearVelocity().x >= -0.5f)) {
+				b2body.applyLinearImpulse(new Vector2(-1, 0), b2body.getWorldCenter(), true);
 
 			} else {
-				this.b2body.setLinearVelocity(new Vector2(0, 0));
+				b2body.setLinearVelocity(new Vector2(0, 0));
 			}
 
-			JsonMove.sendRequest(this.b2body);
+			JsonMove.sendRequest(b2body);
 		}
 	}
 
 	public void update(float dt) {
-		this.setPosition(this.b2body.getPosition().x - (this.getWidth() / 2), this.b2body.getPosition().y - (this.getHeight() / 2));
-		this.setRegion(this.getFrame(dt));
+		setPosition(b2body.getPosition().x - (getWidth() / 2), b2body.getPosition().y - (getHeight() / 2));
+		this.setRegion(getFrame(dt));
 	}
 }

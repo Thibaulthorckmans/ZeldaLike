@@ -20,10 +20,10 @@ public abstract class NonPlayableCharacter extends Sprite{
 	// Constructors
 	// **************************************************
 	public NonPlayableCharacter(PlayScreen screen, float x, float y) {
-		this.world = screen.getWorld();
+		world = screen.getWorld();
 		this.screen = screen;
-		this.setPosition(x, y);
-		this.defineNPC(x, y);
+		setPosition(x, y);
+		defineNPC(x, y);
 	}
 
 	// **************************************************
@@ -43,11 +43,12 @@ public abstract class NonPlayableCharacter extends Sprite{
 	// **************************************************
 	/**
 	 * Move a villager with a fixed timing on a line
-	 * @param	timer1	Travel time on the positive axis
-	 * @param	timer2	Travel time on the negative axis
-	 * @param	yAxe	Define if the villager move on the y-axis or not
+	 * @param timer1 Travel time on the positive axis
+	 * @param timer2 Travel time on the negative axis
+	 * @param yAxe Define if the villager move on the y-axis or not
+	 * @param orientation Define if the villager move is positive or not
 	 */
-	protected abstract void movePathLine(float timer1, float timer2, boolean yAxe);
+	protected abstract void movePathLine(float timer1, float timer2, boolean yAxe, boolean orientation);
 
 	/**
 	 * Move a villager with a fixed timing on a square
