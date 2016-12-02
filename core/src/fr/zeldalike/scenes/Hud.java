@@ -94,10 +94,10 @@ public class Hud implements Disposable {
 	}
 
 	public void setImgButtonX(String pItems) {
-		if(this.imgButtonX.getName() != pItems) {
+		if(!this.imgButtonX.getName().contains(pItems)) {
 			String newItem = pItems.split(":")[1];
 
-			if(this.imgButtonY.getName() == pItems) {
+			if(this.imgButtonY.getName().contains(pItems)) {
 				this.buttonY.setRegion(this.itemsAtlas.findRegion(this.imgButtonX.getName().split(":")[1]));
 				this.imgButtonY.setName(this.imgButtonX.getName());
 			}
@@ -108,10 +108,10 @@ public class Hud implements Disposable {
 	}
 
 	public void setImgButtonY(String pItems) {
-		if(this.imgButtonY.getName() != pItems) {
+		if(!this.imgButtonY.getName().contains(pItems)) {
 			String newItem = pItems.split(":")[1];
 
-			if(this.imgButtonX.getName() == pItems) {
+			if(this.imgButtonX.getName().contains(pItems)) {
 				this.buttonX.setRegion(this.itemsAtlas.findRegion(this.imgButtonY.getName().split(":")[1]));
 				this.imgButtonX.setName(this.imgButtonY.getName());
 			}
@@ -194,9 +194,11 @@ public class Hud implements Disposable {
 
 		this.buttonX = new TextureRegion(this.itemsAtlas.findRegion("Bottle"));
 		this.imgButtonX = new Image(this.buttonX);
+		this.imgButtonX.setName("18:Bottle");
 
 		this.buttonY = new TextureRegion(this.itemsAtlas.findRegion("Flute"));
 		this.imgButtonY = new Image(this.buttonY);
+		this.imgButtonY.setName("0:Flute");
 
 		Stack stackBtnA = new Stack(new Image(btnAtlas.findRegion("buttonA")), this.buttonA);
 		Stack stackBtnB = new Stack(new Image(btnAtlas.findRegion("buttonB")), this.imgButtonB);
