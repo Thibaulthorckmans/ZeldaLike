@@ -17,10 +17,3 @@ Runner
   orig: 242, 32
   offset: 0, 0
   index: -1
-StaticVillager
-  rotate: false
-  xy: 484, 0
-  size: 116, 32
-  orig: 116, 32
-  offset: 0, 0
-  index: -1
