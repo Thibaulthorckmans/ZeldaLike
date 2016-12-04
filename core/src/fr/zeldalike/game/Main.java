@@ -3,7 +3,7 @@ package fr.zeldalike.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import fr.zeldalike.screens.PlayScreen;
+import fr.zeldalike.screens.Menu;
 import fr.zeldalike.tools.MusicLoader;
 
 public class Main extends Game {
@@ -13,17 +13,17 @@ public class Main extends Game {
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		music = new MusicLoader();
+		this.batch = new SpriteBatch();
+		this.music = new MusicLoader();
 		
-		music.loadMusic();
+		this.music.loadMusic();
 		
-		setScreen(new PlayScreen(this));
+		setScreen(new Menu(this));
 	}
 
 	@Override
 	public void render () {
 		super.render();
-		music.update();
+		this.music.update();
 	}
 }
