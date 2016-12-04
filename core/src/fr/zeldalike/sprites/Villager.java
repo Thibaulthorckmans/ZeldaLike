@@ -140,7 +140,7 @@ public class Villager extends NonPlayableCharacter {
 
 		return currentState;
 	}
-
+	
 	// **************************************************
 	// Setters
 	// **************************************************

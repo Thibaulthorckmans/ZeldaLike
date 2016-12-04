@@ -1,0 +1,60 @@
+NPCs.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Queen
+  rotate: false
+  xy: 0, 0
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+Traveller
+  rotate: false
+  xy: 242, 0
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+OldMan
+  rotate: false
+  xy: 0, 32
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+HoodedLady
+  rotate: false
+  xy: 242, 32
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+BrownLady
+  rotate: false
+  xy: 0, 64
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+RedLady
+  rotate: false
+  xy: 242, 64
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+BlondLady
+  rotate: false
+  xy: 0, 96
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1
+FrogMan
+  rotate: false
+  xy: 242, 96
+  size: 242, 32
+  orig: 242, 32
+  offset: 0, 0
+  index: -1

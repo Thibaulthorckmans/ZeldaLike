@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -39,7 +40,7 @@ public class PlayScreen implements Screen {
 	private Avatar player;
 	private Inventory inventory;
 	// NPC's variables
-	private Villager queen, runner;
+	private Villager queen, traveller, frogMan, redLady, hoodedLady, oldMan, brownLady, blondLady;
 	// Music variables
 	private Music music;
 
@@ -63,7 +64,7 @@ public class PlayScreen implements Screen {
 
 		// Create the avatar in our game world
 		atlasAvatar = new TextureAtlas("Sprites/Link.pack");
-		atlasVillager = new TextureAtlas("Sprites/NPC.pack");
+		atlasVillager = new TextureAtlas("Sprites/NPCs.pack");
 		player = new Avatar(world, this);
 		player.setInventory(inventory);
 
@@ -75,10 +76,16 @@ public class PlayScreen implements Screen {
 		music.setVolume(10/Constants.PPM);
 		music.play();
 
-		//
-		runner = new Villager(this, 310, 700, "Runner");
+		// Create the NPCs
+		traveller = new Villager(this, 310, 700, "Traveller");
 		queen = new Villager(this, 210, 520, "Queen");
-
+		frogMan = new Villager(this, 312, 145, "FrogMan");
+		redLady = new Villager(this, 513, 793, "RedLady");
+		hoodedLady = new Villager(this, 745, 463, "HoodedLady");
+		oldMan = new Villager(this, 274, 918, "OldMan");
+		brownLady = new Villager(this, 785, 948, "BrownLady");
+		blondLady =  new Villager(this, 880, 53, "BlondLady");
+				
 		// Set the layers
 		mainMap.setLayers();
 	}
@@ -98,16 +105,58 @@ public class PlayScreen implements Screen {
 	}
 
 	// **************************************************
-	// Setters
+	// Private Methods
 	// **************************************************
-
+	private void drawNPC(SpriteBatch batch) {
+		traveller.draw(batch);
+		queen.draw(batch);
+		frogMan.draw(batch);
+		redLady.draw(batch);
+		hoodedLady.draw(batch);
+		oldMan.draw(batch);
+		brownLady.draw(batch);
+		blondLady.draw(batch);
+	}
+	
+	private void updateNPC(float dt) {
+		traveller.update(dt);
+		queen.update(dt);
+		frogMan.update(dt);
+		redLady.update(dt);
+		hoodedLady.update(dt);
+		oldMan.update(dt);
+		brownLady.update(dt);
+		blondLady.update(dt);
+	}
+	
+	private void setNPCMoving() {
+		traveller.setMoving();
+		queen.setMoving();
+		frogMan.setMoving();
+		redLady.setMoving();
+		hoodedLady.setMoving();
+		oldMan.setMoving();
+		brownLady.setMoving();
+		blondLady.setMoving();
+	}
+	
+	private void pathNPC() {
+		traveller.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
+		queen.movePathLine(2.2f, 2.2f, true, false);
+		frogMan.movePathLine(2, 2, false, true);
+		redLady.movePathLine(2.7f, 2.7f, false, true);
+		hoodedLady.movePathLine(2.3f, 2.3f, true, false);
+		oldMan.movePathLine(1.9f, 1.9f, false, false);
+		brownLady.movePathSquare(0.95f, 1.2f, 0.95f, 1.2f);
+		blondLady.movePathLine(0.6f, 0.6f, false, true);
+	}
 
 	// **************************************************
 	// Public Methods
 	// **************************************************
 	@Override
-	public void render(float delta) {
-		update(delta);
+	public void render(float dt) {
+		update(dt);
 
 		// Clear the game screen with black
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -123,8 +172,7 @@ public class PlayScreen implements Screen {
 		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
 		game.batch.begin();
 		player.draw(game.batch);
-		runner.draw(game.batch);
-		queen.draw(game.batch);
+		drawNPC(game.batch);
 		game.batch.end();
 
 		// Render our first plan layers
@@ -156,15 +204,12 @@ public class PlayScreen implements Screen {
 		world.step(1/60f, 6, 2);
 
 		player.update(dt);
-		runner.update(dt);
-		queen.update(dt);
+		updateNPC(dt);
 		player.setMoving();
-		runner.setMoving();
-		queen.setMoving();
+		setNPCMoving();
 
-		runner.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
-		queen.movePathLine(2.2f, 2.2f, true, false);
-
+		pathNPC();
+		
 		// Attach our gameCam to our player's coordinates
 		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
 		mainCam.update();
