@@ -6,7 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,6 +24,8 @@ public class GameOver implements Screen{
 	// **************************************************
 	private Viewport viewport;
 	private Stage stage;
+	private Texture texture;
+	private SpriteBatch batch;
 	// Game variable
 	private Game game;
 
@@ -33,9 +37,11 @@ public class GameOver implements Screen{
 	 */
 	public GameOver(Game game){
 		this.game = game;
+		this.batch = new SpriteBatch();
 		this.viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, new OrthographicCamera());
 		this.stage = new Stage(this.viewport,((Main)game).batch);
-
+		
+		this.texture = new Texture(Gdx.files.internal("Menu/ZeldaLikeGO.png"));
 		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
 		Table table = new Table();
@@ -51,7 +57,10 @@ public class GameOver implements Screen{
 
 		this.stage.addActor(table);
 	}
-
+	
+	// **************************************************
+	// Public Methods
+	// **************************************************
 	@Override
 	public void show() {
 
@@ -59,14 +68,18 @@ public class GameOver implements Screen{
 
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		this.batch.begin();
+		this.batch.draw(this.texture, 0, 0);
+		this.batch.end();
+		
 		if(Gdx.input.justTouched()){
 			this.game.setScreen(new PlayScreen((Main)this.game));
 
 			this.dispose();
 		}
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		this.stage.draw();
 	}
 
 	@Override
