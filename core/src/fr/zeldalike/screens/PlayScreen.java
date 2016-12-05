@@ -43,7 +43,7 @@ public class PlayScreen implements Screen {
 	// NPC's variables
 	private Villager queen, traveller, frogMan, redLady, hoodedLady, oldMan, brownLady, blondLady, merchant, guard, octopus, fairy, teacher;
 	// Music variables
-	private Music music;
+	private Music music, musicOver;
 	// Sound variable
 	private Sound sound;
 
@@ -74,13 +74,15 @@ public class PlayScreen implements Screen {
 		world.setContactListener(new WorldContactListener());
 		
 		// Launch our game over theme music, set on looping and is volume
-		sound = Gdx.audio.newSound(Gdx.files.internal("Audio/Music/GOverZelda.mp3"));
+		musicOver = MusicLoader.manager.get("Audio/Music/GOverZelda.ogg", Music.class);
+		musicOver.setLooping(false);
+		musicOver.setVolume(10/Constants.PPM);
 		
 		// Launch our main theme music, set on looping and is volume
 		music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
 		music.setLooping(true);
 		music.setVolume(10/Constants.PPM);
-		sound.stop();
+		musicOver.stop();
 		music.play();
 
 		// Create the NPCs
@@ -217,7 +219,7 @@ public class PlayScreen implements Screen {
 		// No heart of link active Game Over
 		if(hud.getHealth() == 0){
 			music.stop();
-			sound.play(0.5f);
+			musicOver.play();
 			gameOver();
 				game.setScreen(new GameOver(game));
 				
