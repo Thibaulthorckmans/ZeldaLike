@@ -10,9 +10,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import fr.zeldalike.assets.Constants;
 import fr.zeldalike.scenes.Inventory;
@@ -44,7 +47,9 @@ public class Avatar extends Sprite {
 	public boolean isMoving = false;
 	//Inventory variables
 	private Inventory inventory;
-
+	//Fixture Object
+	FixtureDef fdef = new FixtureDef();
+	
 	// **************************************************
 	// Constructors
 	// **************************************************
@@ -169,9 +174,7 @@ public class Avatar extends Sprite {
 	 * State
 	 */
 	private State getState() {
-		FixtureDef fdef = new FixtureDef();
 		EdgeShape head = new EdgeShape();
-		head.set(new Vector2(0 / Constants.PPM, 0 / Constants.PPM), new Vector2(0 / Constants.PPM, 0 / Constants.PPM));
 		b2body.getFixtureList();
 		fdef.shape = head;
 		fdef.isSensor = false;
@@ -242,37 +245,26 @@ public class Avatar extends Sprite {
 		if ((currentState == State.ATTACKLEFT)) {
 			head.set(new Vector2(-20 / Constants.PPM, 10 / Constants.PPM),
 					new Vector2(-20 / Constants.PPM, -10 / Constants.PPM));
-			fdef.isSensor = true;
-			// this.b2body.createFixture(head, this.stateTimer);
-			b2body.createFixture(fdef).setUserData("head");
+			this.ManageAttack();
 
 		}
 
-		if (((currentState == State.ATTACKRIGHT) && (stateTimer <= 0.7))) {
+		if ((currentState == State.ATTACKRIGHT)) {
 			head.set(new Vector2(16 / Constants.PPM, -10 / Constants.PPM),
 					new Vector2(16 / Constants.PPM, 10 / Constants.PPM));
-			fdef.isSensor = true;
-			// this.b2body.createFixture(head, this.stateTimer);
-			b2body.createFixture(fdef).setUserData("head");
-			b2body.getFixtureList();
+			this.ManageAttack();
 		}
 
-		if (((currentState == State.ATTACKUP) && (stateTimer <= 0.7))) {
+		if ((currentState == State.ATTACKUP)) {
 			head.set(new Vector2(10 / Constants.PPM, 20 / Constants.PPM),
 					new Vector2(-10 / Constants.PPM, 20 / Constants.PPM));
-			fdef.isSensor = true;
-			// this.b2body.createFixture(head, this.stateTimer);
-			b2body.createFixture(fdef).setUserData("head");
-			b2body.getFixtureList();
+			this.ManageAttack();
 		}
 
-		if (((currentState == State.ATTACKDOWN) && (stateTimer <= 0.7))) {
+		if ((currentState == State.ATTACKDOWN)) {
 			head.set(new Vector2(-10 / Constants.PPM, -20 / Constants.PPM),
 					new Vector2(10 / Constants.PPM, -20 / Constants.PPM));
-			fdef.isSensor = true;
-			// this.b2body.createFixture(head, this.stateTimer);
-			b2body.createFixture(fdef).setUserData("head");
-			b2body.getFixtureList();
+			this.ManageAttack();
 		}
 
 		return currentState;
@@ -409,7 +401,23 @@ public class Avatar extends Sprite {
 			JsonMove.sendRequest(b2body);
 		}
 	}
-
+	
+	//Create Fixture when lunk's Attacking.
+		public void ManageAttack() {
+		//	this.b2body.getFixtureList().clear();
+			this.fdef.isSensor = true;
+			final Fixture obj = this.b2body.createFixture(this.fdef);
+			obj.setUserData("head");
+			Task timertask = new Task() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Avatar.this.b2body.destroyFixture(obj);
+				}
+			};
+			Timer.schedule(timertask, 0.015f);
+		}
+		
 	public void update(float dt) {
 		setPosition(b2body.getPosition().x - (getWidth() / 2), b2body.getPosition().y - (getHeight() / 2));
 		this.setRegion(getFrame(dt));
