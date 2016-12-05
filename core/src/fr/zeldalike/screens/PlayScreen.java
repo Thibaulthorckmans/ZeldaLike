@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -43,6 +44,8 @@ public class PlayScreen implements Screen {
 	private Villager queen, traveller, frogMan, redLady, hoodedLady, oldMan, brownLady, blondLady, merchant, guard, octopus, fairy, teacher;
 	// Music variables
 	private Music music;
+	// Sound variable
+	private Sound sound;
 
 	// **************************************************
 	// Constructors
@@ -69,11 +72,15 @@ public class PlayScreen implements Screen {
 		player.setInventory(inventory);
 
 		world.setContactListener(new WorldContactListener());
-
+		
+		// Launch our game over theme music, set on looping and is volume
+		sound = Gdx.audio.newSound(Gdx.files.internal("Audio/Music/GOverZelda.mp3"));
+		
 		// Launch our main theme music, set on looping and is volume
 		music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
 		music.setLooping(true);
 		music.setVolume(10/Constants.PPM);
+		sound.stop();
 		music.play();
 
 		// Create the NPCs
@@ -209,9 +216,10 @@ public class PlayScreen implements Screen {
 		
 		// No heart of link active Game Over
 		if(hud.getHealth() == 0){
+			music.stop();
+			sound.play(0.5f);
 			gameOver();
 				game.setScreen(new GameOver(game));
-				//sauvegarder partie DataSaveGame(class), faire appel a la methode save de DataSaveGame
 				
 				dispose();
 		}
