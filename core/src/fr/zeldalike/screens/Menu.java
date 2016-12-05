@@ -2,6 +2,7 @@ package fr.zeldalike.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,7 +29,7 @@ public class Menu implements Screen {
 	private SpriteBatch batch;
 	// Game variable
 	private Game game;
-	
+
 	// **************************************************
 	// Constructors
 	// **************************************************
@@ -40,24 +41,24 @@ public class Menu implements Screen {
 		this.batch = new SpriteBatch();
 		this.viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, new OrthographicCamera());
 		this.stage= new Stage(this.viewport, ((Main)game).batch);
-		
+
 		this.texture = new Texture(Gdx.files.internal("Menu/ZeldaLikePres2.png"));
 		Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.RED);
-		
+
 		Table table = new Table();
 		table.center();
 		table.setFillParent(true);
-		
+
 		Label menuLabel = new Label("MENU", font);
 		Label playGameLabel = new Label("Click to Run", font);
-		
+
 		table.add(menuLabel).expandX();
 		table.row();
 		table.add(playGameLabel).expandX().padTop(10);
-		
+
 		this.stage.addActor(table);
 	}
-	
+
 	// **************************************************
 	// Public Methods
 	// **************************************************
@@ -68,17 +69,17 @@ public class Menu implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		this.batch.begin();
 		this.batch.draw(this.texture, 0, 0);
 		this.batch.end();
-		
-		if(Gdx.input.justTouched()){
+
+		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
 			this.game.setScreen(new PlayScreen((Main)this.game));
-			
+
 			this.dispose();
 		}
 	}

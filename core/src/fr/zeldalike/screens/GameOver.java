@@ -2,6 +2,7 @@ package fr.zeldalike.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -75,7 +76,7 @@ public class GameOver implements Screen{
 		this.batch.draw(this.texture, 0, 0);
 		this.batch.end();
 		
-		if(Gdx.input.justTouched()){
+		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
 			this.game.setScreen(new PlayScreen((Main)this.game));
 
 			this.dispose();
