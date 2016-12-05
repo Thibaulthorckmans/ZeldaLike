@@ -19,11 +19,11 @@ public abstract class NonPlayableCharacter extends Sprite{
 	// **************************************************
 	// Constructors
 	// **************************************************
-	public NonPlayableCharacter(PlayScreen screen, float x, float y) {
+	public NonPlayableCharacter(PlayScreen screen, float x, float y, char type) {
 		world = screen.getWorld();
 		this.screen = screen;
 		setPosition(x, y);
-		defineNPC(x, y);
+		defineNPC(x, y, type);
 	}
 
 	// **************************************************
@@ -62,7 +62,7 @@ public abstract class NonPlayableCharacter extends Sprite{
 	/**
 	 * Define the player's initial position, his collision body and the elements that interact with him.
 	 */
-	protected abstract void defineNPC(float x, float y);
+	protected abstract void defineNPC(float x, float y, char type);
 
 	protected abstract void update(float dt);
 }

@@ -34,13 +34,13 @@ public class PlayScreen implements Screen {
 	private Map mainMap;
 	// Box2D variables
 	private World world;
-	private Box2DDebugRenderer b2dr;
+//	private Box2DDebugRenderer b2dr;
 	// Player variables
 	private TextureAtlas atlasAvatar, atlasVillager;
 	private Avatar player;
 	private Inventory inventory;
 	// NPC's variables
-	private Villager queen, traveller, frogMan, redLady, hoodedLady, oldMan, brownLady, blondLady;
+	private Villager queen, traveller, frogMan, redLady, hoodedLady, oldMan, brownLady, blondLady, merchant, guard, octopus, fairy, teacher;
 	// Music variables
 	private Music music;
 
@@ -58,7 +58,7 @@ public class PlayScreen implements Screen {
 		world = new World(new Vector2(0, 0), true);
 
 		// Allows for debug lines of our Box2D world
-		b2dr = new Box2DDebugRenderer();
+//		b2dr = new Box2DDebugRenderer();
 
 		new B2WorldCreator(world, mainMap.getMap());
 
@@ -77,14 +77,20 @@ public class PlayScreen implements Screen {
 		music.play();
 
 		// Create the NPCs
-		traveller = new Villager(this, 310, 700, "Traveller");
-		queen = new Villager(this, 210, 520, "Queen");
-		frogMan = new Villager(this, 312, 145, "FrogMan");
-		redLady = new Villager(this, 513, 793, "RedLady");
-		hoodedLady = new Villager(this, 745, 463, "HoodedLady");
-		oldMan = new Villager(this, 274, 918, "OldMan");
-		brownLady = new Villager(this, 785, 948, "BrownLady");
-		blondLady =  new Villager(this, 880, 53, "BlondLady");
+		traveller = new Villager(this, 310, 700, "Traveller", 'A');
+		queen = new Villager(this, 210, 520, "Queen", 'A');
+		frogMan = new Villager(this, 312, 145, "FrogMan", 'A');
+		redLady = new Villager(this, 513, 793, "RedLady", 'A');
+		hoodedLady = new Villager(this, 745, 463, "HoodedLady", 'A');
+		oldMan = new Villager(this, 274, 918, "OldMan", 'A');
+		brownLady = new Villager(this, 785, 948, "BrownLady", 'A');
+		blondLady =  new Villager(this, 880, 53, "BlondLady", 'A');
+		
+		merchant = new Villager(this, 388, 661, "Merchant", 'B');
+		guard = new Villager(this, 191, 796, "Guard", 'B');
+		octopus = new Villager(this, 1000, 818, "Octopus", 'B');
+		fairy = new Villager(this, 123, 94, "Fairy", 'B');
+		teacher = new Villager(this, 657, 105, "Teacher", 'B');
 				
 		// Set the layers
 		mainMap.setLayers();
@@ -116,6 +122,11 @@ public class PlayScreen implements Screen {
 		oldMan.draw(batch);
 		brownLady.draw(batch);
 		blondLady.draw(batch);
+		merchant.draw(batch);
+		guard.draw(batch);
+		octopus.draw(batch);
+		fairy.draw(batch);
+		teacher.draw(batch);
 	}
 	
 	private void updateNPC(float dt) {
@@ -127,6 +138,11 @@ public class PlayScreen implements Screen {
 		oldMan.update(dt);
 		brownLady.update(dt);
 		blondLady.update(dt);
+		merchant.update(dt);
+		guard.update(dt);
+		octopus.update(dt);
+		fairy.update(dt);
+		teacher.update(dt);
 	}
 	
 	private void setNPCMoving() {
@@ -138,6 +154,11 @@ public class PlayScreen implements Screen {
 		oldMan.setMoving();
 		brownLady.setMoving();
 		blondLady.setMoving();
+		merchant.setMoving();
+		guard.setMoving();
+		octopus.setMoving();
+		fairy.setMoving();
+		teacher.setMoving();
 	}
 	
 	private void pathNPC() {
@@ -166,7 +187,7 @@ public class PlayScreen implements Screen {
 		mainMap.renderLayers(mainMap.getBackPlan());
 
 		// Render our Box2DDebugLines
-		b2dr.render(world, mainCam.getGameCam().combined);
+//		b2dr.render(world, mainCam.getGameCam().combined);
 
 		// Render our player
 		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);

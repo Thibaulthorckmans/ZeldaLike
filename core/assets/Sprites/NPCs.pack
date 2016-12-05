@@ -58,3 +58,87 @@ FrogMan
   orig: 242, 32
   offset: 0, 0
   index: -1
+SleepyMan
+  rotate: false
+  xy: 0, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Teacher
+  rotate: false
+  xy: 30, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Fairy
+  rotate: false
+  xy: 60, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Monkey
+  rotate: false
+  xy: 90, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Octopus
+  rotate: false
+  xy: 120, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Bird
+  rotate: false
+  xy: 150, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Bush 
+  rotate: false
+  xy: 180, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Guard
+  rotate: false
+  xy: 210, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Seer
+  rotate: false
+  xy: 240, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Mage
+  rotate: false
+  xy: 270, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+OldWomen
+  rotate: false
+  xy: 300, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1
+Merchant
+  rotate: false
+  xy: 330, 128
+  size: 30, 32
+  orig: 30, 32
+  offset: 0, 0
+  index: -1

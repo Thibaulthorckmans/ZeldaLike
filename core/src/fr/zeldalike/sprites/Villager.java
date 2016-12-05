@@ -38,23 +38,30 @@ public class Villager extends NonPlayableCharacter {
 	// **************************************************
 	/**
 	 * Initialize the villager's state and animations.
+	 * @param type A for 4*2 sprites, B for 1*1 sprites
 	 */
-	public Villager(PlayScreen screen, float x, float y, String name) {
-		super(screen, x, y);
+	public Villager(PlayScreen screen, float x, float y, String name, char type) {
+		super(screen, x, y, type);
 
 		// Set our current and previous state initial animation
 		currentState = State.STANDDOWN;
 		previousState = State.STANDDOWN;
 
-		walkLeft = new Animation(0.2f, defineAnimation(name, 4, 6, 30, 0, 30, 32));
-		walkRight = new Animation(0.2f, defineAnimation(name, 0, 2, 30, 0, 30, 32));
-		walkDown = new Animation(0.2f, defineAnimation(name, 6, 8, 30, 0, 30, 32));
-		walkUp = new Animation(0.2f, defineAnimation(name, 2, 4, 30, 0, 30, 32));
-
-		standLeft = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 0, 0, 30, 32));
-		standRight = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 90, 0, 30, 32));
-		standDown = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 120, 0, 30, 32));
-		standUp = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 90, 0, 30, 32));
+		if (type == 'A') {
+			walkLeft = new Animation(0.2f, defineAnimation(name, 4, 6, 30, 0, 30, 32));
+			walkRight = new Animation(0.2f, defineAnimation(name, 0, 2, 30, 0, 30, 32));
+			walkDown = new Animation(0.2f, defineAnimation(name, 6, 8, 30, 0, 30, 32));
+			walkUp = new Animation(0.2f, defineAnimation(name, 2, 4, 30, 0, 30, 32));
+	
+			standLeft = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 0, 0, 30, 32));
+			standRight = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 90, 0, 30, 32));
+			standDown = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 120, 0, 30, 32));
+			standUp = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 90, 0, 30, 32));
+		}
+		
+		if (type == 'B') {
+			standDown = new Animation(0, new TextureRegion(screen.getAtlasVillager().findRegion(name), 0, 0, 30, 32));
+		}
 
 		stateTimer = 0;
 		setBounds(0, 0, 30 / Constants.PPM, 32 / Constants.PPM);
@@ -179,14 +186,18 @@ public class Villager extends NonPlayableCharacter {
 	// Public Methods
 	// **************************************************
 	@Override
-	protected void defineNPC(float x, float y) {
+	protected void defineNPC(float x, float y, char type) {
 		BodyDef bdef = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		CircleShape shape = new CircleShape();
 
 		// Set the player's initial position and the type of body used
 		bdef.position.set(x/Constants.PPM, y/Constants.PPM);
-		bdef.type = BodyDef.BodyType.DynamicBody;
+		if (type == 'A') {
+			bdef.type = BodyDef.BodyType.DynamicBody;
+		} else {
+			bdef.type = BodyDef.BodyType.StaticBody;
+		}
 
 		b2body = world.createBody(bdef);
 
