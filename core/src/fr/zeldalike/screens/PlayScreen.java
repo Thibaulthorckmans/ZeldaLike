@@ -279,8 +279,8 @@ public class PlayScreen implements Screen {
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_9)) {
 			if(this.mainMap.getMapName() == "Village") {
-				this.mainMap.setMap("DonjonTest");
-			} else if(this.mainMap.getMapName() == "DonjonTest") {
+				this.mainMap.setMap("donjonTest");
+			} else if(this.mainMap.getMapName() == "donjonTest") {
 				this.mainMap.setMap("Village");
 			}
 		}
