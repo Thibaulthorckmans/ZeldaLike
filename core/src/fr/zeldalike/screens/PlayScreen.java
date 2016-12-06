@@ -43,8 +43,6 @@ public class PlayScreen implements Screen {
 	private Villager queen, traveller, frogMan, redLady, hoodedLady, oldMan, brownLady, blondLady, merchant, guard, octopus, fairy, teacher;
 	// Music variables
 	private Music music, musicOver;
-	// Sound variable
-	private Sound sound;
 
 	// **************************************************
 	// Constructors
