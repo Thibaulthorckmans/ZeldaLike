@@ -21,11 +21,13 @@ public class Map {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	int[] backPlan, firstPlan; // Layers variables
+	private String mapName;
 
 	// **************************************************
 	// Constructors
 	// **************************************************
 	public Map(String mapName) {
+		this.mapName = mapName;
 		// Load our map and setup the renderer
 		this.mapLoader = new TmxMapLoader();
 		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
@@ -37,6 +39,10 @@ public class Map {
 	// **************************************************
 	public TiledMap getMap() {
 		return this.map;
+	}
+
+	public String getMapName() {
+		return this.mapName;
 	}
 
 	public int[] getBackPlan() {
@@ -51,6 +57,7 @@ public class Map {
 	// Setters
 	// **************************************************
 	public void setMap(String mapName) {
+		this.mapName = mapName;
 		this.mapLoader = new TmxMapLoader();
 		this.map = this.mapLoader.load("Maps/" + mapName + ".tmx");
 		this.renderer.setMap(this.map);

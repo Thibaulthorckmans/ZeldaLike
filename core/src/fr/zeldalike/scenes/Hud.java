@@ -34,7 +34,7 @@ public class Hud implements Disposable {
 
 	private int health = 6, maxHealth = 6; // Health's attributes, initialize at 6
 
-	private Label buttonA; // Label that describe the actions for the 'A' button
+	private Label buttonA, lblTitre, lblMessage; // Label that describe the actions for the 'A' button
 	private TextureRegion buttonB, buttonX, buttonY; // Texture representing the items defined on the 'B', 'X' and 'Y' buttons
 	private Image imgButtonB, imgButtonX, imgButtonY;
 
@@ -124,11 +124,14 @@ public class Hud implements Disposable {
 	public void setDialogBoxVisibility() {
 		if(this.dialogBox.isVisible()) {
 			this.dialogBox.setVisible(false);
-			System.out.println("Masquer");
 		} else {
 			this.dialogBox.setVisible(true);
-			System.out.println("Afficher");
 		}
+	}
+
+	public void setDialog(String title, String message) {
+		this.lblTitre.setText(title);
+		this.lblMessage.setText(message);
 	}
 
 	// **************************************************
@@ -228,7 +231,7 @@ public class Hud implements Disposable {
 		this.dialogBox.setFillParent(true);
 		this.dialogBox.setVisible(false);
 
-		this.writeDialog("Narrateur :", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...");
+		this.writeDialog("", "");
 
 		this.stage.addActor(this.dialogBox);
 	}
@@ -330,15 +333,15 @@ public class Hud implements Disposable {
 		dialog.setFillParent(true);
 		//dialog.setDebug(true);
 
-		Label lblTitre = new Label("Narrateur :", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-		lblTitre.setFontScale(2f);
-		Label lblMessage = new Label("Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-		lblMessage.setFontScale(1.5f);
-		lblMessage.setWrap(true);
+		this.lblTitre = new Label("Narrateur :", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		this.lblTitre.setFontScale(2f);
+		this.lblMessage = new Label("Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		this.lblMessage.setFontScale(1.5f);
+		this.lblMessage.setWrap(true);
 
-		dialog.add(lblTitre).top();
+		dialog.add(this.lblTitre).top();
 		dialog.row();
-		dialog.add(lblMessage).top().padLeft(25f);
+		dialog.add(this.lblMessage).top().padLeft(25f);
 
 		stackDialog.add(dialogBG);
 		stackDialog.add(dialog);

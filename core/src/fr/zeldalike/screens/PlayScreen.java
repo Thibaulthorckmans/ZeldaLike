@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 import fr.zeldalike.assets.Constants;
@@ -35,7 +34,7 @@ public class PlayScreen implements Screen {
 	private Map mainMap;
 	// Box2D variables
 	private World world;
-//	private Box2DDebugRenderer b2dr;
+	//	private Box2DDebugRenderer b2dr;
 	// Player variables
 	private TextureAtlas atlasAvatar, atlasVillager;
 	private Avatar player;
@@ -52,133 +51,133 @@ public class PlayScreen implements Screen {
 	// **************************************************
 	public PlayScreen(Main game) {
 		this.game = game;
-		mainCam = new Camera();
-		mainMap = new Map("Village");
-		hud = new Hud(game.batch);
-		inventory = new Inventory(game.batch);
+		this.mainCam = new Camera();
+		this.mainMap = new Map("Village");
+		this.hud = new Hud(game.batch);
+		this.inventory = new Inventory(game.batch);
 
 		// Create our Box2D world, setting no gravity and allow bodies to sleep
-		world = new World(new Vector2(0, 0), true);
+		this.world = new World(new Vector2(0, 0), true);
 
 		// Allows for debug lines of our Box2D world
-//		b2dr = new Box2DDebugRenderer();
+		//		b2dr = new Box2DDebugRenderer();
 
-		new B2WorldCreator(world, mainMap.getMap());
+		new B2WorldCreator(this.world, this.mainMap.getMap());
 
 		// Create the avatar in our game world
-		atlasAvatar = new TextureAtlas("Sprites/Link.pack");
-		atlasVillager = new TextureAtlas("Sprites/NPCs.pack");
-		player = new Avatar(world, this);
-		player.setInventory(inventory);
+		this.atlasAvatar = new TextureAtlas("Sprites/Link.pack");
+		this.atlasVillager = new TextureAtlas("Sprites/NPCs.pack");
+		this.player = new Avatar(this.world, this);
+		this.player.setInventory(this.inventory);
 
-		world.setContactListener(new WorldContactListener());
-		
+		this.world.setContactListener(new WorldContactListener());
+
 		// Launch our game over theme music, set on looping and is volume
-		musicOver = MusicLoader.manager.get("Audio/Music/GOverZelda.ogg", Music.class);
-		musicOver.setLooping(false);
-		musicOver.setVolume(10/Constants.PPM);
-		
+		this.musicOver = MusicLoader.manager.get("Audio/Music/GOverZelda.ogg", Music.class);
+		this.musicOver.setLooping(false);
+		this.musicOver.setVolume(10/Constants.PPM);
+
 		// Launch our main theme music, set on looping and is volume
-		music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
-		music.setLooping(true);
-		music.setVolume(10/Constants.PPM);
-		musicOver.stop();
-		music.play();
+		this.music = MusicLoader.manager.get("Audio/Music/ALTTP_Kakariko_Village.ogg", Music.class);
+		this.music.setLooping(true);
+		this.music.setVolume(10/Constants.PPM);
+		this.musicOver.stop();
+		this.music.play();
 
 		// Create the NPCs
-		traveller = new Villager(this, 310, 700, "Traveller", 'A');
-		queen = new Villager(this, 210, 520, "Queen", 'A');
-		frogMan = new Villager(this, 312, 145, "FrogMan", 'A');
-		redLady = new Villager(this, 513, 793, "RedLady", 'A');
-		hoodedLady = new Villager(this, 745, 463, "HoodedLady", 'A');
-		oldMan = new Villager(this, 274, 918, "OldMan", 'A');
-		brownLady = new Villager(this, 785, 948, "BrownLady", 'A');
-		blondLady =  new Villager(this, 880, 53, "BlondLady", 'A');
-		
-		merchant = new Villager(this, 388, 661, "Merchant", 'B');
-		guard = new Villager(this, 191, 796, "Guard", 'B');
-		octopus = new Villager(this, 1000, 818, "Octopus", 'B');
-		fairy = new Villager(this, 123, 94, "Fairy", 'B');
-		teacher = new Villager(this, 657, 105, "Teacher", 'B');
-				
+		this.traveller = new Villager(this, 310, 700, "Traveller", 'A');
+		this.queen = new Villager(this, 210, 520, "Queen", 'A');
+		this.frogMan = new Villager(this, 312, 145, "FrogMan", 'A');
+		this.redLady = new Villager(this, 513, 793, "RedLady", 'A');
+		this.hoodedLady = new Villager(this, 745, 463, "HoodedLady", 'A');
+		this.oldMan = new Villager(this, 274, 918, "OldMan", 'A');
+		this.brownLady = new Villager(this, 785, 948, "BrownLady", 'A');
+		this.blondLady =  new Villager(this, 880, 53, "BlondLady", 'A');
+
+		this.merchant = new Villager(this, 388, 661, "Merchant", 'B');
+		this.guard = new Villager(this, 191, 796, "Guard", 'B');
+		this.octopus = new Villager(this, 1000, 818, "Octopus", 'B');
+		this.fairy = new Villager(this, 123, 94, "Fairy", 'B');
+		this.teacher = new Villager(this, 657, 105, "Teacher", 'B');
+
 		// Set the layers
-		mainMap.setLayers();
+		this.mainMap.setLayers();
 	}
 
 	// **************************************************
 	// Getters
 	// **************************************************
 	public TextureAtlas getAtlasAvatar() {
-		return atlasAvatar;
+		return this.atlasAvatar;
 	}
 	public TextureAtlas getAtlasVillager() {
-		return atlasVillager;
+		return this.atlasVillager;
 	}
 
 	public World getWorld() {
-		return world;
+		return this.world;
 	}
 
 	// **************************************************
 	// Private Methods
 	// **************************************************
 	private void drawNPC(SpriteBatch batch) {
-		traveller.draw(batch);
-		queen.draw(batch);
-		frogMan.draw(batch);
-		redLady.draw(batch);
-		hoodedLady.draw(batch);
-		oldMan.draw(batch);
-		brownLady.draw(batch);
-		blondLady.draw(batch);
-		merchant.draw(batch);
-		guard.draw(batch);
-		octopus.draw(batch);
-		fairy.draw(batch);
-		teacher.draw(batch);
+		this.traveller.draw(batch);
+		this.queen.draw(batch);
+		this.frogMan.draw(batch);
+		this.redLady.draw(batch);
+		this.hoodedLady.draw(batch);
+		this.oldMan.draw(batch);
+		this.brownLady.draw(batch);
+		this.blondLady.draw(batch);
+		this.merchant.draw(batch);
+		this.guard.draw(batch);
+		this.octopus.draw(batch);
+		this.fairy.draw(batch);
+		this.teacher.draw(batch);
 	}
-	
+
 	private void updateNPC(float dt) {
-		traveller.update(dt);
-		queen.update(dt);
-		frogMan.update(dt);
-		redLady.update(dt);
-		hoodedLady.update(dt);
-		oldMan.update(dt);
-		brownLady.update(dt);
-		blondLady.update(dt);
-		merchant.update(dt);
-		guard.update(dt);
-		octopus.update(dt);
-		fairy.update(dt);
-		teacher.update(dt);
+		this.traveller.update(dt);
+		this.queen.update(dt);
+		this.frogMan.update(dt);
+		this.redLady.update(dt);
+		this.hoodedLady.update(dt);
+		this.oldMan.update(dt);
+		this.brownLady.update(dt);
+		this.blondLady.update(dt);
+		this.merchant.update(dt);
+		this.guard.update(dt);
+		this.octopus.update(dt);
+		this.fairy.update(dt);
+		this.teacher.update(dt);
 	}
-	
+
 	private void setNPCMoving() {
-		traveller.setMoving();
-		queen.setMoving();
-		frogMan.setMoving();
-		redLady.setMoving();
-		hoodedLady.setMoving();
-		oldMan.setMoving();
-		brownLady.setMoving();
-		blondLady.setMoving();
-		merchant.setMoving();
-		guard.setMoving();
-		octopus.setMoving();
-		fairy.setMoving();
-		teacher.setMoving();
+		this.traveller.setMoving();
+		this.queen.setMoving();
+		this.frogMan.setMoving();
+		this.redLady.setMoving();
+		this.hoodedLady.setMoving();
+		this.oldMan.setMoving();
+		this.brownLady.setMoving();
+		this.blondLady.setMoving();
+		this.merchant.setMoving();
+		this.guard.setMoving();
+		this.octopus.setMoving();
+		this.fairy.setMoving();
+		this.teacher.setMoving();
 	}
-	
+
 	private void pathNPC() {
-		traveller.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
-		queen.movePathLine(2.2f, 2.2f, true, false);
-		frogMan.movePathLine(2, 2, false, true);
-		redLady.movePathLine(2.7f, 2.7f, false, true);
-		hoodedLady.movePathLine(2.3f, 2.3f, true, false);
-		oldMan.movePathLine(1.9f, 1.9f, false, false);
-		brownLady.movePathSquare(0.95f, 1.2f, 0.95f, 1.2f);
-		blondLady.movePathLine(0.6f, 0.6f, false, true);
+		this.traveller.movePathSquare(4.6f, 3.1f, 4.6f, 3.1f);
+		this.queen.movePathLine(2.2f, 2.2f, true, false);
+		this.frogMan.movePathLine(2, 2, false, true);
+		this.redLady.movePathLine(2.7f, 2.7f, false, true);
+		this.hoodedLady.movePathLine(2.3f, 2.3f, true, false);
+		this.oldMan.movePathLine(1.9f, 1.9f, false, false);
+		this.brownLady.movePathSquare(0.95f, 1.2f, 0.95f, 1.2f);
+		this.blondLady.movePathLine(0.6f, 0.6f, false, true);
 	}
 
 	// **************************************************
@@ -186,85 +185,103 @@ public class PlayScreen implements Screen {
 	// **************************************************
 	@Override
 	public void render(float dt) {
-		update(dt);
+		this.update(dt);
 
 		// Clear the game screen with black
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// Render our back plan layers
-		mainMap.renderLayers(mainMap.getBackPlan());
+		this.mainMap.renderLayers(this.mainMap.getBackPlan());
 
 		// Render our Box2DDebugLines
-//		b2dr.render(world, mainCam.getGameCam().combined);
+		//		b2dr.render(world, mainCam.getGameCam().combined);
 
 		// Render our player
-		game.batch.setProjectionMatrix(mainCam.getGameCam().combined);
-		game.batch.begin();
-		player.draw(game.batch);
-		drawNPC(game.batch);
-		game.batch.end();
+		this.game.batch.setProjectionMatrix(this.mainCam.getGameCam().combined);
+		this.game.batch.begin();
+		this.player.draw(this.game.batch);
+		this.drawNPC(this.game.batch);
+		this.game.batch.end();
 
 		// Render our first plan layers
-		mainMap.renderLayers(mainMap.getFirstPlan());
+		this.mainMap.renderLayers(this.mainMap.getFirstPlan());
 
 		// Set our batch to now draw the HUD camera sees
-		game.batch.setProjectionMatrix(hud.getStage().getCamera().combined);
-		hud.getStage().draw();
+		this.game.batch.setProjectionMatrix(this.hud.getStage().getCamera().combined);
+		this.hud.getStage().draw();
 
 		// Set our batch to now draw the HUD camera sees
-		game.batch.setProjectionMatrix(inventory.getStage().getCamera().combined);
-		inventory.getStage().draw();
-		
+		this.game.batch.setProjectionMatrix(this.inventory.getStage().getCamera().combined);
+		this.inventory.getStage().draw();
+
 		// No heart of link active Game Over
-		if(hud.getHealth() == 0){
-			music.stop();
-			musicOver.play();
-			gameOver();
-				game.setScreen(new GameOver(game));
-				
-				dispose();
+		if(this.hud.getHealth() == 0){
+			this.music.stop();
+			this.musicOver.play();
+			this.gameOver();
+			this.game.setScreen(new GameOver(this.game));
+
+			this.dispose();
 		}
 	}
 
 	public void update(float dt) {
 		// Handle user input first
-		player.handleInput(dt);
+		this.player.handleInput(dt);
 
 		// Takes 1 step in the physics simulation (60 times per second)
-		world.step(1/60f, 6, 2);
+		this.world.step(1/60f, 6, 2);
 
-		player.update(dt);
-		updateNPC(dt);
-		player.setMoving();
-		setNPCMoving();
+		this.player.update(dt);
+		this.updateNPC(dt);
+		this.player.setMoving();
+		this.setNPCMoving();
 
-		pathNPC();
-		
+		this.pathNPC();
+
 		// Attach our gameCam to our player's coordinates
-		mainCam.setPosition(player.b2body.getPosition().x, player.b2body.getPosition().y);
-		mainCam.update();
+		this.mainCam.setPosition(this.player.b2body.getPosition().x, this.player.b2body.getPosition().y);
+		this.mainCam.update();
 
 		// Tell our renderer to draw only what our camera can see in our game world
-		mainMap.setView(mainCam.getGameCam());
+		this.mainMap.setView(this.mainCam.getGameCam());
 
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-			hud.damage(1);
+			this.hud.damage(1);
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-			hud.cure(1);
+			this.hud.cure(1);
 		}
 
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-			if(inventory.getInvetoryIsVisible()) {
-				hud.setImgButtonY(inventory.getNameItem());
+			if(this.inventory.getInvetoryIsVisible()) {
+				this.hud.setImgButtonY(this.inventory.getNameItem());
 			}
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-			if(inventory.getInvetoryIsVisible()) {
-				hud.setImgButtonX(inventory.getNameItem());
+			if(this.inventory.getInvetoryIsVisible()) {
+				this.hud.setImgButtonX(this.inventory.getNameItem());
+			}
+		}
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_0)) {
+			if(this.hud.getDialogBoxVisibility()) {
+				this.hud.setDialogBoxVisibility();
+				this.hud.setDialog("", "");
+			} else {
+				this.hud.setDialog("Narrateur :", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...");
+				this.hud.setDialogBoxVisibility();
+			}
+		}
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_9)) {
+			if(this.mainMap.getMapName() == "Village") {
+				this.mainMap.setMap("DonjonTest");
+			} else if(this.mainMap.getMapName() == "DonjonTest") {
+				this.mainMap.setMap("Village");
 			}
 		}
 	}
@@ -272,7 +289,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		// Update our game viewport
-		mainCam.resize(width, height);
+		this.mainCam.resize(width, height);
 	}
 
 	@Override
@@ -289,13 +306,13 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		mainMap.dispose();
-		world.dispose();
-		hud.dispose();
+		this.mainMap.dispose();
+		this.world.dispose();
+		this.hud.dispose();
 	}
 
 	public boolean gameOver(){
-		if((player.currentState == Avatar.State.DEAD) && (player.getStateTimer()>3)){
+		if((this.player.currentState == Avatar.State.DEAD) && (this.player.getStateTimer()>3)){
 			return true;
 		}
 		return false;
