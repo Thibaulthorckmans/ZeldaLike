@@ -326,13 +326,6 @@ public class Avatar extends Sprite {
 
 		fdef.shape = shape;
 		b2body.createFixture(fdef);
-
-		EdgeShape head = new EdgeShape();
-		head.set(new Vector2(-2 / Constants.PPM, 7 / Constants.PPM), new Vector2(2 / Constants.PPM, 7 / Constants.PPM));
-		fdef.shape = head;
-		fdef.isSensor = true;
-
-		b2body.createFixture(fdef).setUserData("head");
 	}
 
 	/**
