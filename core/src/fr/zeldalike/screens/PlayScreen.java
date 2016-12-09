@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -63,7 +62,7 @@ public class PlayScreen implements Screen {
 		new B2WorldCreator(this.world, this.mainMap.getMap());
 
 		// Create the avatar in our game world
-		this.atlasAvatar = new TextureAtlas("Sprites/Link.pack");
+		this.atlasAvatar = new TextureAtlas("Sprites/Link2.pack");
 		this.atlasVillager = new TextureAtlas("Sprites/NPCs.pack");
 		this.player = new Avatar(this.world, this);
 		this.player.setInventory(this.inventory);
